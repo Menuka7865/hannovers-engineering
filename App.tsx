@@ -313,8 +313,8 @@ export default function App() {
             </div>
           </Card>
           <div className="grid grid-cols-2 gap-4">
-            <img src="./images/hero1.JPG" className="rounded-xl shadow-lg w-full h-full object-cover" />
-            <img src="./images/hero2.png" className="rounded-xl shadow-lg w-full h-full object-cover translate-y-8" />
+            <img src="hero1.JPG" className="rounded-xl shadow-lg w-full h-full object-cover" />
+            <img src="hero2.png" className="rounded-xl shadow-lg w-full h-full object-cover translate-y-8" />
           </div>
         </div>
 
@@ -342,7 +342,7 @@ export default function App() {
         <div className="mb-24">
           <SectionHeader title="Our Team" subtitle="Experts" centered />
           <div className="flex flex-col lg:flex-row items-stretch justify-center gap-8">
-            <img src="./images/team.png" className="rounded-xl shadow-lg w-full lg:w-1/3 object-cover" alt="Engineering Team" />
+            <img src="team.png" className="rounded-xl shadow-lg w-full lg:w-1/3 object-cover" alt="Engineering Team" />
             <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[500px] flex-1">
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
                 Our maintenance and servicing teams are composed of highly skilled Service staff with comprehensive expertise in mechanical, electrical, pneumatic, hydraulic, and automation systems. Our team provides an efficient and professional service to clients across the island. We are the trusted experts who understand your machinery from the inside out.
@@ -704,7 +704,7 @@ export default function App() {
             <div className="bg-industrial-highlight p-2 rounded-lg">
               <Settings className="text-white animate-spin-slow" size={24} />
             </div>
-            <img src="./images/logo.png" alt="logo" width={200} height={200} className='rounded-lg' />
+            <img src="logo.png" alt="logo" width={200} height={200} className='rounded-lg' />
           </div>
 
           {/* Desktop Nav */}
@@ -799,7 +799,7 @@ export default function App() {
         <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
             <div className="flex items-center gap-2 mb-6">
-              <img src="./images/logo.png" alt="logo" className='w-48' />
+              <img src="logo.png" alt="logo" className='w-48' />
             </div>
             <p className="mb-6">
               Our mission is to deliver professional, reliable service that keeps your operations running smoothly, 24/7
