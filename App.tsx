@@ -12,7 +12,9 @@ import {
   Settings as SettingsIcon,
   Briefcase as ToolCase,
   Wrench,
-  FireExtinguisher
+  FireExtinguisher,
+  Youtube,
+  ChevronDown
 } from 'lucide-react';
 import { motion, useMotionValue, useSpring, useTransform, useInView, animate, AnimatePresence } from 'framer-motion';
 import { Page, Service, Project } from './types';
@@ -51,7 +53,28 @@ export default function App() {
     setIsMenuOpen(false);
   }, [currentPage, selectedService]);
 
+  // Sync state with URL path on load and back/forward
+  useEffect(() => {
+    const handlePopState = () => {
+      const path = window.location.pathname.slice(1).toLowerCase();
+      const pageValues = Object.values(Page) as string[];
+
+      if (pageValues.includes(path)) {
+        setCurrentPage(path as Page);
+      } else if (path === '' || path === 'home') {
+        setCurrentPage(Page.HOME);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    handlePopState(); // Run on initial load
+
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const navigateTo = (page: Page) => {
+    const path = page === Page.HOME ? '/' : `/${page.toLowerCase()}`;
+    window.history.pushState({ page }, '', path);
     setCurrentPage(page);
     setSelectedService(null);
   };
@@ -67,32 +90,33 @@ export default function App() {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=2070"
+          src="/generator.jpg"
           alt="Engineering Welding"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-industrial-900/90 to-industrial-800/70 mix-blend-multiply"></div>
       </div>
 
-      <div className="container mx-auto px-6 relative z-10 pt-20">
+      <div className=" relative z-10">
         <div className="max-w-5xl">
-          <div className="inline-block px-4 py-2 bg-industrial-highlight/20 border border-industrial-highlight text-orange-400 rounded-full text-sm font-bold mb-6 backdrop-blur-sm flex items-center gap-2 max-w-fit">
+          {/* <div className="inline-block px-4 py-2 bg-industrial-highlight/20 border border-industrial-highlight text-orange-400 rounded-full text-sm font-bold mb-6 backdrop-blur-sm flex items-center gap-2 max-w-fit">
             <Clock3 size={20} /><span> 24/7 Emergency Service Available</span>
-          </div>
-          <h1 className="text-5xl md:text-6xl font-heading font-extrabold text-white leading-tight mb-6 drop-shadow-lg">
+          </div> */}
+          {/* <h1 className="text-5xl md:text-6xl font-heading font-extrabold text-white leading-tight mb-6 drop-shadow-lg">
             Professional Engineering Solutions <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500"><br />Synchronising to your Pulse</span>
-          </h1>
-          <p className="text-xl text-gray-200 mb-10 max-w-3xl font-light">
+          </h1> */}
+          <p className="text-xl text-gray-200 text-center mb-20
+           max-w-3xl font-light">
             We are driven by the belief that innovation is the spark that ignites the imagination blueprint of engineering, where creativity meets problem-solving.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4">
+          {/* <div className="flex flex-col sm:flex-row gap-4">
             <Button size="lg" onClick={() => navigateTo(Page.CONTACT)}>
               Request a Quote <ChevronRight size={20} />
             </Button>
             <Button variant="outline" size="lg" onClick={() => navigateTo(Page.SERVICES)}>
               Explore Services
             </Button>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -192,16 +216,16 @@ export default function App() {
         </svg>
 
         <div className="container mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="flex flex-col items-center  max-w-4xl mx-auto">
             <div>
-              <SectionHeader title="Why Hannovers?" subtitle="The Gold Standard" />
+              <SectionHeader title="Why Hannovers?" centered />
               <p className="text-gray-600 dark:text-gray-300 mb-8 text-lg">
                 Hannovers Engineering is a trusted provider of comprehensive engineering solutions serving critical industries.<br />
                 We offer 24/7  service, responding swiftly to breakdowns and maintenance needs.
                 <br /><br />
                 Backed by a team of skilled professionals in mechanical, electrical, hydraulic, and automation systems, we ensure efficient, reliable, and high-quality service that keeps your operations running without interruption
               </p>
-              <ul className="space-y-4">
+              <ul className="space-y-4 inline-block text-left">
                 {[
                   '24/7 Emergency Support',
                   'Over 100+ Satisfied Customers',
@@ -215,7 +239,8 @@ export default function App() {
                 ))}
               </ul>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+          </div>
+          {/* <div className="grid grid-cols-2 gap-4">
               {[
                 { val: '15+', label: 'Years Experience', icon: Clock },
                 { val: '100+', label: 'Projects Done', icon: Briefcase },
@@ -235,8 +260,7 @@ export default function App() {
                   <span className="text-sm text-gray-500 dark:text-gray-400">{stat.label}</span>
                 </motion.div>
               ))}
-            </div>
-          </div>
+            </div> */}
         </div>
       </section>
 
@@ -255,7 +279,7 @@ export default function App() {
               <p className="text-gray-600 dark:text-gray-300 mb-6 italic whitespace-pre-line">"{t.content}"</p>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-gray-300 rounded-full overflow-hidden">
-                  <img src="./images/testi1.png" alt={t.name} className='w-full h-full object-cover' />
+                  <img src="./testi1.png" alt={t.name} className='w-full h-full object-cover' />
                 </div>
                 <div>
                   <h4 className="font-bold text-gray-900 dark:text-white whitespace-pre-line">{t.name}</h4>
@@ -273,9 +297,9 @@ export default function App() {
           <h2 className="text-3xl font-bold mb-6">Need Urgent Engineering Assistance?</h2>
           <p className="text-gray-400 mb-8 max-w-2xl mx-auto">Our rapid response teams are ready to deploy worldwide. Minimizing downtime is our priority.</p>
           <div className="flex justify-center gap-4">
-            <Button size="lg" onClick={() => window.location.href = 'tel:+94773829924'}>
+            {/* <Button size="lg" onClick={() => window.location.href = 'tel:+94773829924'}>
               <Phone className="mr-2" size={20} /> Call Now  <br />+94 77 382 9924
-            </Button>
+            </Button> */}
             <Button variant="outline" size="lg" onClick={() => navigateTo(Page.CONTACT)}>
               Contact Support
             </Button>
@@ -354,24 +378,14 @@ export default function App() {
       <div>
         <SectionHeader title="Our Services" subtitle="From Us" centered />
         <div className="flex flex-wrap justify-center gap-8">
-          <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
-            <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><ToolCase /> Sales and Spares</h2>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
-              We are a leading supplier of genuine and quality parts for a wide range of machinery and engines. Our inventory includes:
-            </p>
-            <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mb-6 justify-center ml-6">
-              <li>Generators and Marine Propulsion</li>
-              <li>Heavy Construction Equipment</li>
-              <li>Industrial Machinery</li>
-              <li>Specialized Vehicle Support</li>
-            </ul>
-          </Card>
+
           <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
             <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><Zap /> Power Generation</h2>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
               We specialise in end-to-end services for Diesel Generators and Marine Generators, ensuring peak performance and 24/7 reliability across the nation. <br /> <br />
               We specialize in power generation and preventive maintenance, supplying generator controllers, alternators, and spare parts trusted by industries nationwide for their quality and dependability.
             </p>
+            <Button onClick={() => navigateTo(Page.PROJECTS)} className="px-2 w-fit mx-auto">See Our Experience</Button>
           </Card>
           <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
             <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><Anchor /> Marine, Industrial & Construction</h2>
@@ -384,6 +398,7 @@ export default function App() {
               <li>Construction Machinery: Comprehensive service, repairs, and <span className="ml-5">genuine spare parts.</span></li>
 
             </ul>
+            <Button onClick={() => navigateTo(Page.PROJECTS)} className="px-2 w-fit mx-auto">See Our Experience</Button>
           </Card>
           <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col  max-w-[600px] ">
             <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><Truck /> Specialised Vehicles & Engines</h2>
@@ -391,18 +406,33 @@ export default function App() {
               We are equipped to handle a variety of specialised and commercial vehicles, including airport fire trucks, aircraft towing vehicles, and fire rescue vehicles.
               Our services cover everything from standard maintenance to complete overhauls.
             </p>
+            <Button onClick={() => navigateTo(Page.PROJECTS)} className="px-2 w-fit mx-auto mt-14">See Our Experience</Button>
           </Card>
-          <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[900px] ">
+          <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
             <h2 className="text-3xl font-bold text-center text-industrial-900 dark:text-white mb-6 flex items-center  justify-center gap-2"><Wrench /> Other Specialised Services</h2>
             {/* <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
               We are a leading supplier of genuine and quality parts for a wide range of machinery and engines. Our inventory includes:
             </p> */}
             <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mb-6 justify-center ml-6">
               <li>Locomotive Engines: Full-scale service, repair, and overhauls.</li>
-              <li>Chassis Repairs: Crack reinforcements, re-aligning, and modifications.</li>
-              <li>Heavy Diesel Engine Repairs: Comprehensive service, repair, and overhauls.</li>
-              <li>Health Reports: In-depth diagnostics and health reports for generators and other machinery.</li>
+              <li>Chassis Repairs: Crack reinforcements, re-aligning, and <span className="ml-5">modifications.</span> </li>
+              <li>Heavy Diesel Engine Repairs: Comprehensive service, repair, <span className="ml-5">and overhauls.</span></li>
+              <li>Health Reports: In-depth diagnostics and health reports for <span className="ml-5">generators and other machinery.</span></li>
             </ul>
+            <Button onClick={() => navigateTo(Page.PROJECTS)} className="px-2 w-fit mx-auto">See Our Experience</Button>
+          </Card>
+          <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
+            <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><ToolCase /> Sales and Spares</h2>
+            <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
+              We are a leading supplier of genuine and quality parts for a wide range of machinery and engines. Our inventory includes:
+            </p>
+            <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mb-6 justify-center ml-6">
+              <li>Generators and Marine Propulsion</li>
+              <li>Heavy Construction Equipment</li>
+              <li>Industrial Machinery</li>
+              <li>Specialized Vehicle Support</li>
+            </ul>
+            <Button onClick={() => navigateTo(Page.PROJECTS)} className="px-2 w-fit mx-auto">See Our Experience</Button>
           </Card>
         </div>
       </div>
@@ -586,11 +616,11 @@ export default function App() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="space-y-8">
             <div className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-lg border-l-4 border-industrial-highlight">
-              <h3 className="text-2xl font-bold dark:text-white mb-4 flex items-center gap-3">
-                <Phone className="text-industrial-highlight" /> 24/7 Emergency
+              <h3 className="text-lg md:text-2xl font-bold dark:text-white mb-4 flex items-center gap-3 ml-2">
+                Contact Number
               </h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">For urgent breakdowns and critical system failures.</p>
-              <a href="tel:+123456789" className="text-3xl font-bold text-industrial-900 dark:text-white hover:text-industrial-accent">+94 77 382 9924</a>
+              {/* <p className="text-gray-600 dark:text-gray-300 mb-4">For urgent breakdowns and critical system failures.</p> */}
+              <a href="tel:+94773829924" className="text-xl md:text-3xl font-semibold text-industrial-900 flex dark:text-white hover:text-industrial-accent"><Phone className="text-industrial-highlight mt-2 mx-2" />+94 77 382 9924</a>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -600,16 +630,16 @@ export default function App() {
                 <p className="text-gray-500 text-sm mt-2">102/159, Madara Gardens, Mattegoda, 10240. Sri Lanka</p>
               </div>
               <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-xl">
-                <Mail className="text-blue-500 mb-4" size={32} />
-                <h4 className="font-bold dark:text-white">Email Us</h4>
-                <p className="text-gray-500 text-sm mt-2">hello.hnvrs@gmail.com</p>
+                {/* <Mail className="text-blue-500 mb-4" size={32} /> */}
+                <a href="mailto:hellohnvrs@gmail.com"><Button size="lg" className='mx-auto my-8'>Email Us</Button></a>
+                {/* <p className="text-gray-500 text-sm mt-2">hellohnvrs@gmail.com</p> */}
               </div>
             </div>
 
             {/* Mock Map */}
             <div className="h-64 bg-gray-200 rounded-xl overflow-hidden relative">
               <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-                Map Integration Placeholder
+                {/* Map Integration Placeholder */}
               </div>
               <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3320.624113429111!2d79.9650603283118!3d6.81812687014675!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae251d6657dd76b%3A0x187744c7f359ed69!2sHannovers%20Engineering%20Sri%20Lanka!5e0!3m2!1sen!2slk!4v1768752490817!5m2!1sen!2slk" width="800" height="350" style={{ border: 0 }} allowFullScreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
@@ -620,12 +650,28 @@ export default function App() {
             <form className="space-y-6">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium dark:text-gray-300">First Name</label>
+                  <label className="text-sm font-medium dark:text-gray-300">Name</label>
                   <input type="text" className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium dark:text-gray-300">Last Name</label>
+                  <label className="text-sm font-medium dark:text-gray-300">Designation</label>
                   <input type="text" className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium dark:text-gray-300">Company Name</label>
+                  <input type="text" className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium dark:text-gray-300">Type of Inquiry</label>
+                  <select className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white appearance-none">
+                    <option value="" disabled selected>Select Inquiry Type</option>
+                    <option value="General Inquiry">Power & Generators</option>
+                    <option value="Request for Quotation">Marine & Propulsion Services</option>
+                    <option value="Spare Parts Inquiry">Industrial Machinery</option>
+                    <option value="Technical Support">Construction Machinery</option>
+                    <option value="Service & Maintenance">Spare Parts</option>
+                    <option value="Other">Other</option>
+                  </select>
                 </div>
               </div>
               <div className="space-y-2">
@@ -692,19 +738,22 @@ export default function App() {
   // );
 
   return (
-    <div className={`min-h-screen transition-colors duration-500 ${isDarkMode ? 'dark bg-industrial-900' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen transition-colors duration-500  ${isDarkMode ? 'dark bg-industrial-900' : 'bg-gray-50'}`}>
 
       {/* Sticky Header */}
-      <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 dark:bg-industrial-900/90 shadow-md backdrop-blur-md py-3' : 'bg-transparent py-6'}`}>
+      <header className={`fixed  top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 dark:bg-industrial-900/90 shadow-md backdrop-blur-md py-3' : 'bg-transparent py-6'}`}>
         <div className="container mx-auto px-6 flex justify-between items-center">
           <div
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => navigateTo(Page.HOME)}
           >
-            <div className="bg-industrial-highlight p-2 rounded-lg">
+            {/* <div className="bg-industrial-highlight p-2 rounded-lg">
               <Settings className="text-white animate-spin-slow" size={24} />
+            </div> */}
+            <img src="logo2.png" alt="logo" width={400} height={400} className='rounded-xl bg-gray-50 p-4 w-48 lg:w-[400px] h-auto' />
+            <div className='hidden lg:block text-2xl font-bold text-corporate-primary pl-4'>HANNOVERS ENGINEERING PRIVATE LIMITED <br />
+              <span className='text text-white' style={{ fontFamily: "'Dancing Script', cursive" }}>Synchronizing to your Pulse</span>
             </div>
-            <img src="logo.png" alt="logo" width={200} height={200} className='rounded-lg' />
           </div>
 
           {/* Desktop Nav */}
@@ -728,7 +777,7 @@ export default function App() {
             ))}
           </nav>
 
-          <div className="hidden lg:flex items-center gap-4">
+          {/* <div className="hidden lg:flex items-center gap-4">
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
               className={`p-2 rounded-full transition-colors ${isScrolled ? 'bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-yellow-400' : 'bg-white/10 text-white'}`}
@@ -738,13 +787,13 @@ export default function App() {
             <Button size="sm" onClick={() => navigateTo(Page.CONTACT)}>
               Request Quote
             </Button>
-          </div>
+          </div> */}
 
           {/* Mobile Menu Toggle */}
           <div className="lg:hidden flex items-center gap-4">
-            <button onClick={() => setIsDarkMode(!isDarkMode)} className="text-gray-400">
+            {/* <button onClick={() => setIsDarkMode(!isDarkMode)} className="text-gray-400">
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
+            </button> */}
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={`text-2xl ${isScrolled ? 'text-gray-900 dark:text-white' : 'text-white'}`}>
               {isMenuOpen ? <X /> : <Menu />}
             </button>
@@ -799,30 +848,29 @@ export default function App() {
         <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
             <div className="flex items-center gap-2 mb-6">
-              <img src="logo.png" alt="logo" className='w-48' />
+              <img src="logo.png" alt="logo" className='w-48 bg-white p-2 rounded-xl w-64 h-28' />
             </div>
             <p className="mb-6">
-              Our mission is to deliver professional, reliable service that keeps your operations running smoothly, 24/7
+              Our mission is to keep your machinery,fleets and plants in constant motion.Through expert, up-to-date maintenance, We minimize downtime and ensure your operations run smoothly, 24/7.
             </p>
             <div className="flex gap-4">
               <a href="" target="_blank"><Linkedin className="hover:text-white cursor-pointer" /></a>
               <a href="https://www.facebook.com/hannoversengineering/" target="_blank"><Facebook className="hover:text-white cursor-pointer" /></a>
               <a href="" target="_blank"><Instagram className="hover:text-white cursor-pointer" /></a>
+              <a href="" target="_blank"><Youtube className="hover:text-white cursor-pointer" width={28} height={28} /></a>
             </div>
           </div>
           <div>
             <h4 className="text-white font-bold mb-6">Services</h4>
             <ul className="space-y-3">
-              {[
-                { label: 'Generators & Power Systems', page: Page.ABOUT },
-                { label: 'Marine & Propulsion Systems', page: Page.SERVICES },
-                { label: 'Specialized Vehicle & Fleet Support', page: Page.PROJECTS },
-                { label: 'Custom Fabrication', page: Page.CAREERS },
-                { label: 'Industrial Repairs', page: Page.CAREERS },
-                { label: 'Spare Parts Supply', page: Page.CAREERS },
-              ].map((link) => (
-                <li key={link.label}>
-                  <button onClick={() => navigateTo(link.page)} className="hover:text-industrial-accent transition-colors">{link.label}</button>
+              {servicesData.map((service) => (
+                <li key={service.id}>
+                  <button
+                    onClick={() => handleServiceClick(service)}
+                    className="hover:text-industrial-accent transition-colors text-left"
+                  >
+                    {service.title}
+                  </button>
                 </li>
               ))}
             </ul>
@@ -845,9 +893,10 @@ export default function App() {
           <div>
             <h4 className="text-white font-bold mb-6">Contact</h4>
             <ul className="space-y-3">
-              <li className="flex items-start gap-3"><MapPin size={20} className="mt-1" /> 102/159, Madara Gardens, Mattegoda, 10240. Sri Lanka</li>
+              <li className="flex items-start gap-3"><MapPin size={20} className="mt-1" /> 102/159, Madara Gardens, <br />Mattegoda, 10240. Sri Lanka</li>
               <li className="flex items-center gap-3"><Phone size={20} /> +94 77 382 9924</li>
               <li className="flex items-center gap-3"><Mail size={20} /> hellohnvrs@gmail.com</li>
+              <li className="flex items-center gap-3"><Youtube size={20} /> <a href="" target="_blank" className="hover:text-white">Visit our YouTube Channel</a></li>
             </ul>
           </div>
 
