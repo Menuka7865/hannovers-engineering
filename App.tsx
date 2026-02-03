@@ -14,12 +14,289 @@ import {
   Wrench,
   FireExtinguisher,
   Youtube,
-  ChevronDown
+  ChevronDown,
+  Loader2
 } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import { motion, useMotionValue, useSpring, useTransform, useInView, animate, AnimatePresence } from 'framer-motion';
 import { Page, Service, Project } from './types';
 import { servicesData, projectsData, jobsData, testimonials } from './data';
 import { Button, Card, SectionHeader } from './components/Components';
+
+// --- TYPES ---
+interface HeroProps {
+  navigateTo: (page: Page) => void;
+}
+
+interface ServiceCardProps {
+  key?: string;
+  service: Service;
+  handleServiceClick: (service: Service) => void;
+}
+
+interface CounterProps {
+  value: string;
+  duration?: number;
+  shouldAnimate?: boolean;
+}
+
+interface PageProps {
+  navigateTo: (page: Page) => void;
+}
+
+interface HomePageProps extends PageProps {
+  handleServiceClick: (service: Service) => void;
+}
+
+interface ContactPageProps {
+  handleFormSubmit: (e: React.FormEvent) => Promise<void>;
+  formData: {
+    name: string;
+    designation: string;
+    company: string;
+    inquiryType: string;
+    email: string;
+    message: string;
+  };
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  submitStatus: 'idle' | 'success' | 'error';
+  isSending: boolean;
+}
+
+// --- SUB-COMPONENTS (Pages) ---
+
+const Hero = ({ navigateTo }: HeroProps) => (
+  <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    {/* Background Image with Overlay */}
+    <div className="absolute inset-0 z-0">
+      <img
+        src="/generator.jpg"
+        alt="Engineering Welding"
+        className="w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-industrial-900/90 to-industrial-800/70 mix-blend-multiply"></div>
+    </div>
+
+    <div className=" relative z-10">
+      <div className="max-w-5xl">
+        <p className="text-xl text-gray-200 text-center mb-20
+         max-w-3xl font-light">
+          We are driven by the belief that innovation is the spark that ignites the imagination blueprint of engineering, where creativity meets problem-solving.
+        </p>
+      </div>
+    </div>
+
+    {/* Decorative Elements */}
+    <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-gray-50 dark:from-industrial-900 to-transparent z-10"></div>
+  </div>
+);
+
+const ServiceCard = ({ service, handleServiceClick }: ServiceCardProps) => (
+  <Card className="group bg-white dark:bg-industrial-800 shadow-xl border border-gray-100 dark:border-slate-700 hover:border-industrial-accent dark:hover:border-cyan-500 h-full flex flex-col relative">
+    <div className="h-48 overflow-hidden relative">
+      <img
+        src={service.image}
+        alt={service.title}
+        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+      />
+      <div className="absolute inset-0 bg-blue-900/0 group-hover:bg-blue-900/40 transition-colors duration-300 flex items-center justify-center">
+        <service.icon size={48} className="text-white opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300" />
+      </div>
+    </div>
+    <div className="p-6 flex flex-col flex-grow">
+      <div className="mb-4 text-industrial-accent dark:text-cyan-400">
+        <service.icon size={32} />
+      </div>
+      <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{service.title}</h3>
+      <p className="text-sm text-industrial-highlight font-medium mb-4">{service.tagline}</p>
+      <p className="text-gray-600 dark:text-gray-300 mb-6 flex-grow">{service.description}</p>
+      <Button
+        variant="outline"
+        size="sm"
+        className="self-start mt-auto"
+        onClick={() => handleServiceClick(service)}
+      >
+        View Details
+      </Button>
+    </div>
+  </Card>
+);
+
+const Counter = ({ value, duration = 2, shouldAnimate = true }: CounterProps) => {
+  const numericValue = parseInt(value);
+  const suffix = value.replace(/[0-9]/g, '');
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest));
+
+  useEffect(() => {
+    if (isInView && shouldAnimate) {
+      count.set(0);
+      const controls = animate(count, numericValue, { duration });
+      return controls.stop;
+    }
+  }, [isInView, numericValue, count, duration, shouldAnimate]);
+
+  if (!shouldAnimate) {
+    return (
+      <span className="text-4xl font-bold text-gray-900 dark:text-white block mb-2">
+        {value}
+      </span>
+    );
+  }
+
+  return (
+    <span ref={ref} className="text-4xl font-bold text-gray-900 dark:text-white block mb-2">
+      <motion.span>{rounded}</motion.span>{suffix}
+    </span>
+  );
+};
+
+// --- SUB-COMPONENTS (Pages) ---
+
+const ContactPage = ({ handleFormSubmit, formData, handleInputChange, submitStatus, isSending }: ContactPageProps) => (
+  <div className="pt-24 pb-24">
+    <div className="container mx-auto px-6">
+      <SectionHeader title="Contact Us" subtitle="Get in Touch" centered />
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="space-y-8">
+          <div className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-lg border-l-4 border-industrial-highlight">
+            <h3 className="text-lg md:text-2xl font-bold dark:text-white mb-4 flex items-center gap-3 ml-2">
+              Contact Number
+            </h3>
+            <a href="tel:+94773829924" className="text-xl md:text-3xl font-semibold text-industrial-900 flex dark:text-white hover:text-industrial-accent"><Phone className="text-industrial-highlight mt-2 mx-2" />+94 77 382 9924</a>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-xl">
+              <MapPin className="text-blue-500 mb-4" size={32} />
+              <h4 className="font-bold dark:text-white">Headquarters</h4>
+              <p className="text-gray-500 text-sm mt-2">102/159, Madara Gardens, Mattegoda, 10240. Sri Lanka</p>
+            </div>
+            <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-xl">
+              <a href="mailto:hellohnvrs@gmail.com"><Button size="lg" className='mx-auto my-8'>Email Us</Button></a>
+            </div>
+          </div>
+
+          {/* Mock Map */}
+          <div className="h-64 bg-gray-200 rounded-xl overflow-hidden relative">
+            <div className="absolute inset-0 flex items-center justify-center text-gray-500">
+            </div>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3320.624113429111!2d79.9650603283118!3d6.81812687014675!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae251d6657dd76b%3A0x187744c7f359ed69!2sHannovers%20Engineering%20Sri%20Lanka!5e0!3m2!1sen!2slk!4v1768752490817!5m2!1sen!2slk" width="800" height="350" style={{ border: 0 }} allowFullScreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-industrial-900 p-8 rounded-2xl shadow-2xl">
+          <h3 className="text-2xl font-bold dark:text-white mb-6">Send Message</h3>
+          <form onSubmit={handleFormSubmit} className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium dark:text-gray-300">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium dark:text-gray-300">Designation</label>
+                <input
+                  type="text"
+                  name="designation"
+                  value={formData.designation}
+                  onChange={handleInputChange}
+                  className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium dark:text-gray-300">Company Name</label>
+                <input
+                  type="text"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleInputChange}
+                  className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium dark:text-gray-300">Type of Inquiry</label>
+                <select
+                  name="inquiryType"
+                  required
+                  value={formData.inquiryType}
+                  onChange={handleInputChange}
+                  className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white appearance-none"
+                >
+                  <option value="" disabled>Select Inquiry Type</option>
+                  <option value="Power & Generators">Power & Generators</option>
+                  <option value="Marine & Propulsion Services">Marine & Propulsion Services</option>
+                  <option value="Industrial Machinery">Industrial Machinery</option>
+                  <option value="Construction Machinery">Construction Machinery</option>
+                  <option value="Spare Parts">Spare Parts</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium dark:text-gray-300">Email Address</label>
+              <input
+                type="email"
+                name="email"
+                required
+                value={formData.email}
+                onChange={handleInputChange}
+                className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium dark:text-gray-300">Message</label>
+              <textarea
+                name="message"
+                required
+                rows={5}
+                value={formData.message}
+                onChange={handleInputChange}
+                className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+              ></textarea>
+            </div>
+
+            {submitStatus === 'success' && (
+              <div className="p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg flex items-center gap-2">
+                <CheckCircle size={20} />
+                <span>Message sent successfully! We will get back to you soon.</span>
+              </div>
+            )}
+
+            {submitStatus === 'error' && (
+              <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg flex items-center gap-2">
+                <X size={20} />
+                <span>Failed to send message. Please try again or contact us via phone.</span>
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              className="w-full h-12 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isSending}
+            >
+              {isSending ? (
+                <>Sending... <Loader2 size={18} className="animate-spin" /></>
+              ) : (
+                <>Send Message <Send size={18} /></>
+              )}
+            </Button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 // --- MAIN LAYOUT & ROUTING ---
 
@@ -30,6 +307,18 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const [isChatOpen, setIsChatOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  // EmailJS Form State
+  const [formData, setFormData] = useState({
+    name: '',
+    designation: '',
+    company: '',
+    inquiryType: '',
+    email: '',
+    message: ''
+  });
+  const [isSending, setIsSending] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   // Scroll handler for sticky header
   useEffect(() => {
@@ -83,114 +372,57 @@ export default function App() {
     setSelectedService(service);
   };
 
-  // --- SUB-COMPONENTS (Pages) ---
-
-  const Hero = () => (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="/generator.jpg"
-          alt="Engineering Welding"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-industrial-900/90 to-industrial-800/70 mix-blend-multiply"></div>
-      </div>
-
-      <div className=" relative z-10">
-        <div className="max-w-5xl">
-          {/* <div className="inline-block px-4 py-2 bg-industrial-highlight/20 border border-industrial-highlight text-orange-400 rounded-full text-sm font-bold mb-6 backdrop-blur-sm flex items-center gap-2 max-w-fit">
-            <Clock3 size={20} /><span> 24/7 Emergency Service Available</span>
-          </div> */}
-          {/* <h1 className="text-5xl md:text-6xl font-heading font-extrabold text-white leading-tight mb-6 drop-shadow-lg">
-            Professional Engineering Solutions <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500"><br />Synchronising to your Pulse</span>
-          </h1> */}
-          <p className="text-xl text-gray-200 text-center mb-20
-           max-w-3xl font-light">
-            We are driven by the belief that innovation is the spark that ignites the imagination blueprint of engineering, where creativity meets problem-solving.
-          </p>
-          {/* <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" onClick={() => navigateTo(Page.CONTACT)}>
-              Request a Quote <ChevronRight size={20} />
-            </Button>
-            <Button variant="outline" size="lg" onClick={() => navigateTo(Page.SERVICES)}>
-              Explore Services
-            </Button>
-          </div> */}
-        </div>
-      </div>
-
-      {/* Decorative Elements */}
-      <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-gray-50 dark:from-industrial-900 to-transparent z-10"></div>
-    </div>
-  );
-
-  const ServiceCard = ({ service }: { service: Service }) => (
-    <Card className="group bg-white dark:bg-industrial-800 shadow-xl border border-gray-100 dark:border-slate-700 hover:border-industrial-accent dark:hover:border-cyan-500 h-full flex flex-col relative">
-      <div className="h-48 overflow-hidden relative">
-        <img
-          src={service.image}
-          alt={service.title}
-          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-        />
-        <div className="absolute inset-0 bg-blue-900/0 group-hover:bg-blue-900/40 transition-colors duration-300 flex items-center justify-center">
-          <service.icon size={48} className="text-white opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300" />
-        </div>
-      </div>
-      <div className="p-6 flex flex-col flex-grow">
-        <div className="mb-4 text-industrial-accent dark:text-cyan-400">
-          <service.icon size={32} />
-        </div>
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{service.title}</h3>
-        <p className="text-sm text-industrial-highlight font-medium mb-4">{service.tagline}</p>
-        <p className="text-gray-600 dark:text-gray-300 mb-6 flex-grow">{service.description}</p>
-        <Button
-          variant="outline"
-          size="sm"
-          className="self-start mt-auto"
-          onClick={() => handleServiceClick(service)}
-        >
-          View Details
-        </Button>
-      </div>
-    </Card>
-  );
-
-  const Counter = ({ value, duration = 2, shouldAnimate = true }: { value: string, duration?: number, shouldAnimate?: boolean }) => {
-    const numericValue = parseInt(value);
-    const suffix = value.replace(/[0-9]/g, '');
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-    const count = useMotionValue(0);
-    const rounded = useTransform(count, (latest) => Math.round(latest));
-
-    useEffect(() => {
-      if (isInView && shouldAnimate) {
-        count.set(0);
-        const controls = animate(count, numericValue, { duration });
-        return controls.stop;
-      }
-    }, [isInView, numericValue, count, duration, shouldAnimate]);
-
-    if (!shouldAnimate) {
-      return (
-        <span className="text-4xl font-bold text-gray-900 dark:text-white block mb-2">
-          {value}
-        </span>
-      );
-    }
-
-    return (
-      <span ref={ref} className="text-4xl font-bold text-gray-900 dark:text-white block mb-2">
-        <motion.span>{rounded}</motion.span>{suffix}
-      </span>
-    );
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const HomePage = () => (
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSending(true);
+    setSubmitStatus('idle');
+
+    try {
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        designation: formData.designation,
+        company_name: formData.company,
+        inquiry_type: formData.inquiryType,
+        message: formData.message,
+        to_name: 'Hannovers Engineering',
+      };
+
+      const result = await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        templateParams,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+
+      if (result.status === 200) {
+        setSubmitStatus('success');
+        setFormData({
+          name: '',
+          designation: '',
+          company: '',
+          inquiryType: '',
+          email: '',
+          message: ''
+        });
+      }
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+
+  const HomePage = ({ navigateTo, handleServiceClick }: HomePageProps) => (
     <div className="space-y-24 pb-24">
-      <Hero />
+      <Hero navigateTo={navigateTo} />
 
       {/* Services Overview */}
       <section className="container mx-auto px-6">
@@ -200,7 +432,7 @@ export default function App() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {servicesData.slice(0, 3).map((s) => (
-            <ServiceCard service={s} />
+            <ServiceCard key={s.id} service={s} handleServiceClick={handleServiceClick} />
           ))}
         </div>
         <div className="text-center mt-12">
@@ -240,27 +472,6 @@ export default function App() {
               </ul>
             </div>
           </div>
-          {/* <div className="grid grid-cols-2 gap-4">
-              {[
-                { val: '15+', label: 'Years Experience', icon: Clock },
-                { val: '100+', label: 'Projects Done', icon: Briefcase },
-                { val: '50+', label: 'Global Partners', icon: Globe },
-                { val: '24/7', label: 'Support', icon: Phone, shouldAnimate: false },
-              ].map((stat, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="bg-white dark:bg-industrial-900 p-8 rounded-2xl shadow-lg border-b-4 border-industrial-accent flex flex-col items-center text-center transform hover:-translate-y-2 transition-transform duration-300"
-                >
-                  <stat.icon className="mb-4 text-gray-400" size={32} />
-                  <Counter value={stat.val} shouldAnimate={(stat as any).shouldAnimate} />
-                  <span className="text-sm text-gray-500 dark:text-gray-400">{stat.label}</span>
-                </motion.div>
-              ))}
-            </div> */}
         </div>
       </section>
 
@@ -297,9 +508,6 @@ export default function App() {
           <h2 className="text-3xl font-bold mb-6">Need Urgent Engineering Assistance?</h2>
           <p className="text-gray-400 mb-8 max-w-2xl mx-auto">Our rapid response teams are ready to deploy worldwide. Minimizing downtime is our priority.</p>
           <div className="flex justify-center gap-4">
-            {/* <Button size="lg" onClick={() => window.location.href = 'tel:+94773829924'}>
-              <Phone className="mr-2" size={20} /> Call Now  <br />+94 77 382 9924
-            </Button> */}
             <Button variant="outline" size="lg" onClick={() => navigateTo(Page.CONTACT)}>
               Contact Support
             </Button>
@@ -309,7 +517,7 @@ export default function App() {
     </div>
   );
 
-  const AboutPage = () => (
+  const AboutPage = ({ navigateTo }: PageProps) => (
     <div className="pb-24 pt-20">
       <div className="h-96 relative bg-gray-900 flex items-center justify-center">
         <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2070" className="absolute inset-0 w-full h-full object-cover opacity-30" />
@@ -439,7 +647,7 @@ export default function App() {
     </div>
   );
 
-  const ServicesPage = () => (
+  const ServicesPage = ({ navigateTo, handleServiceClick }: HomePageProps) => (
     <div className="pb-24 pt-20">
       <div className="container mx-auto px-6">
         <SectionHeader title="Engineering Services" subtitle="What We Do" centered />
@@ -463,7 +671,7 @@ export default function App() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {servicesData.map((s) => (
-            <ServiceCard service={s} />
+            <ServiceCard key={s.id} service={s} handleServiceClick={handleServiceClick} />
           ))}
         </div>
 
@@ -479,7 +687,13 @@ export default function App() {
     </div>
   );
 
-  const ServiceModal = ({ service, onClose }: { service: Service; onClose: () => void }) => {
+  interface ServiceModalProps {
+    service: Service;
+    onClose: () => void;
+    navigateTo: (page: Page) => void;
+  }
+
+  const ServiceModal = ({ service, onClose, navigateTo }: ServiceModalProps) => {
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -553,7 +767,7 @@ export default function App() {
     );
   };
 
-  const ProjectsPage = () => {
+  const ProjectsPage = ({ navigateTo }: PageProps) => {
     const [filter, setFilter] = useState('All');
     const filteredProjects = filter === 'All' ? projectsData : projectsData.filter(p => p.category === filter);
 
@@ -608,87 +822,7 @@ export default function App() {
     );
   };
 
-  const ContactPage = () => (
-    <div className="pt-24 pb-24">
-      <div className="container mx-auto px-6">
-        <SectionHeader title="Contact Us" subtitle="Get in Touch" centered />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div className="space-y-8">
-            <div className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-lg border-l-4 border-industrial-highlight">
-              <h3 className="text-lg md:text-2xl font-bold dark:text-white mb-4 flex items-center gap-3 ml-2">
-                Contact Number
-              </h3>
-              {/* <p className="text-gray-600 dark:text-gray-300 mb-4">For urgent breakdowns and critical system failures.</p> */}
-              <a href="tel:+94773829924" className="text-xl md:text-3xl font-semibold text-industrial-900 flex dark:text-white hover:text-industrial-accent"><Phone className="text-industrial-highlight mt-2 mx-2" />+94 77 382 9924</a>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-xl">
-                <MapPin className="text-blue-500 mb-4" size={32} />
-                <h4 className="font-bold dark:text-white">Headquarters</h4>
-                <p className="text-gray-500 text-sm mt-2">102/159, Madara Gardens, Mattegoda, 10240. Sri Lanka</p>
-              </div>
-              <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-xl">
-                {/* <Mail className="text-blue-500 mb-4" size={32} /> */}
-                <a href="mailto:hellohnvrs@gmail.com"><Button size="lg" className='mx-auto my-8'>Email Us</Button></a>
-                {/* <p className="text-gray-500 text-sm mt-2">hellohnvrs@gmail.com</p> */}
-              </div>
-            </div>
-
-            {/* Mock Map */}
-            <div className="h-64 bg-gray-200 rounded-xl overflow-hidden relative">
-              <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-                {/* Map Integration Placeholder */}
-              </div>
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3320.624113429111!2d79.9650603283118!3d6.81812687014675!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae251d6657dd76b%3A0x187744c7f359ed69!2sHannovers%20Engineering%20Sri%20Lanka!5e0!3m2!1sen!2slk!4v1768752490817!5m2!1sen!2slk" width="800" height="350" style={{ border: 0 }} allowFullScreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-industrial-900 p-8 rounded-2xl shadow-2xl">
-            <h3 className="text-2xl font-bold dark:text-white mb-6">Send Message</h3>
-            <form className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium dark:text-gray-300">Name</label>
-                  <input type="text" className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium dark:text-gray-300">Designation</label>
-                  <input type="text" className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium dark:text-gray-300">Company Name</label>
-                  <input type="text" className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium dark:text-gray-300">Type of Inquiry</label>
-                  <select className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white appearance-none">
-                    <option value="" disabled selected>Select Inquiry Type</option>
-                    <option value="General Inquiry">Power & Generators</option>
-                    <option value="Request for Quotation">Marine & Propulsion Services</option>
-                    <option value="Spare Parts Inquiry">Industrial Machinery</option>
-                    <option value="Technical Support">Construction Machinery</option>
-                    <option value="Service & Maintenance">Spare Parts</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium dark:text-gray-300">Email Address</label>
-                <input type="email" className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium dark:text-gray-300">Message</label>
-                <textarea rows={5} className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"></textarea>
-              </div>
-              <Button className="w-full h-12 text-lg">Send Message <Send size={18} /></Button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 
   // const CareersPage = () => (
   //   <div className="pt-20 pb-24">
@@ -826,12 +960,19 @@ export default function App() {
 
       {/* Main Content Render */}
       <main className="min-h-screen">
-        {currentPage === Page.HOME && <HomePage />}
-        {currentPage === Page.ABOUT && <AboutPage />}
-        {currentPage === Page.SERVICES && <ServicesPage />}
-        {currentPage === Page.PROJECTS && <ProjectsPage />}
-        {currentPage === Page.CONTACT && <ContactPage />}
-        {/* {currentPage === Page.CAREERS && <CareersPage />} */}
+        {currentPage === Page.HOME && <HomePage navigateTo={navigateTo} handleServiceClick={handleServiceClick} />}
+        {currentPage === Page.ABOUT && <AboutPage navigateTo={navigateTo} />}
+        {currentPage === Page.SERVICES && <ServicesPage navigateTo={navigateTo} handleServiceClick={handleServiceClick} />}
+        {currentPage === Page.PROJECTS && <ProjectsPage navigateTo={navigateTo} />}
+        {currentPage === Page.CONTACT && (
+          <ContactPage
+            handleFormSubmit={handleFormSubmit}
+            formData={formData}
+            handleInputChange={handleInputChange}
+            submitStatus={submitStatus}
+            isSending={isSending}
+          />
+        )}
       </main>
 
       <AnimatePresence>
@@ -839,6 +980,7 @@ export default function App() {
           <ServiceModal
             service={selectedService}
             onClose={() => setSelectedService(null)}
+            navigateTo={navigateTo}
           />
         )}
       </AnimatePresence>
