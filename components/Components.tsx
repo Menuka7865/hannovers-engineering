@@ -41,10 +41,10 @@ export const Card: React.FC<{ children: React.ReactNode; className?: string }> =
 
 export const SectionHeader: React.FC<{ title: string; subtitle: string; centered?: boolean }> = ({ title, subtitle, centered }) => (
   <div className={`mb-12 ${centered ? 'text-center' : ''}`}>
-    <h3 className="text-industrial-highlight font-bold uppercase tracking-wider text-sm mb-2">{subtitle}</h3>
+    <h3 className="text-industrial-700 font-bold uppercase tracking-wider text-sm mb-2">{subtitle}</h3>
     <h2 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 dark:text-white relative inline-block">
       {title}
-      <span className="absolute -bottom-2 left-0 w-1/2 h-1 bg-industrial-accent rounded-full"></span>
+      {/* <span className="absolute -bottom-2 left-0 w-1/2 h-1 bg-industrial-accent rounded-full"></span> */}
     </h2>
   </div>
 );

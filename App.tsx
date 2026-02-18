@@ -15,12 +15,13 @@ import {
   FireExtinguisher,
   Youtube,
   ChevronDown,
-  Loader2
+  Loader2,
+  Cog
 } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { motion, useMotionValue, useSpring, useTransform, useInView, animate, AnimatePresence } from 'framer-motion';
 import { Page, Service, Project } from './types';
-import { servicesData, projectsData, jobsData, testimonials } from './data';
+import { servicesData, galleryData, jobsData, testimonials } from './data';
 import { Button, Card, SectionHeader } from './components/Components';
 
 // --- TYPES ---
@@ -70,20 +71,18 @@ const Hero = ({ navigateTo }: HeroProps) => (
     {/* Background Image with Overlay */}
     <div className="absolute inset-0 z-0">
       <img
-        src="/generator.jpg"
-        alt="Engineering Welding"
+        src="/landing1.jpg"
+        alt="Rocker Levers Engineering"
         className="w-full h-full object-cover"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-industrial-900/90 to-industrial-800/70 mix-blend-multiply"></div>
     </div>
 
-    <div className=" relative z-10">
-      <div className="max-w-5xl">
-        <p className="text-xl text-gray-200 text-center mb-20
-         max-w-3xl font-light">
-          We are driven by the belief that innovation is the spark that ignites the imagination blueprint of engineering, where creativity meets problem-solving.
-        </p>
-      </div>
+    <div className="relative z-10 text-center px-6">
+      <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">Hannovers Engineering</h1>
+      <p className="text-xl md:text-2xl text-gray-200 max-w-4xl mx-auto font-light">
+        The Standard in Industrial Reliability. Specialized maintenance and lifecycle solutions for Heavy Diesel, Power Systems, and Maritime operations.
+      </p>
     </div>
 
     {/* Decorative Elements */}
@@ -93,7 +92,7 @@ const Hero = ({ navigateTo }: HeroProps) => (
 
 const ServiceCard = ({ service, handleServiceClick }: ServiceCardProps) => (
   <Card className="group bg-white dark:bg-industrial-800 shadow-xl border border-gray-100 dark:border-slate-700 hover:border-industrial-accent dark:hover:border-cyan-500 h-full flex flex-col relative">
-    <div className="h-48 overflow-hidden relative">
+    <div className="aspect-[3/2] overflow-hidden relative">
       <img
         src={service.image}
         alt={service.title}
@@ -108,7 +107,7 @@ const ServiceCard = ({ service, handleServiceClick }: ServiceCardProps) => (
         <service.icon size={32} />
       </div>
       <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{service.title}</h3>
-      <p className="text-sm text-industrial-highlight font-medium mb-4">{service.tagline}</p>
+      <p className="text-sm text-industrial-700 font-medium mb-4">{service.tagline}</p>
       <p className="text-gray-600 dark:text-gray-300 mb-6 flex-grow">{service.description}</p>
       <Button
         variant="outline"
@@ -304,6 +303,7 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>(Page.HOME);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [isYoutubeOpen, setIsYoutubeOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const [isChatOpen, setIsChatOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -424,11 +424,31 @@ export default function App() {
     <div className="space-y-24 pb-24">
       <Hero navigateTo={navigateTo} />
 
+      {/* Vision Section */}
+      <section className="bg-white dark:bg-white-900 py-20">
+        <div className="container mx-auto px-6">
+          <p className="text-3xl md:text-4xl text-center italic text-industrial-900 dark:text-industrial-900 font-light leading-relaxed max-w-5xl mx-auto">
+            "We are driven by the belief that innovation is the spark that ignites the imagination blueprint of engineering, where creativity meets problem-solving."
+          </p>
+        </div>
+      </section>
+
+      {/* Authority Block - Experience Quote */}
+      {/* <section className="bg-gray-50 dark:bg-industrial-800 py-16">
+        <div className="container mx-auto px-6">
+          <p className="text-xl md:text-2xl text-center text-gray-800 dark:text-gray-200 font-semibold leading-relaxed max-w-4xl mx-auto">
+            "Experience is the currency of engineering. You can buy gold, but you cannot buy the decades of expertise earned in the field. At Hannovers, we don't just bring tools; we bring the wisdom of a thousand solved problems."
+          </p>
+        </div>
+      </section> */}
+
       {/* Services Overview */}
       <section className="container mx-auto px-6">
         <SectionHeader title="Our Engineering Services" subtitle="" centered />
         <div className="mb-6 text-center w-10xl ">
-          <p className="text-gray-600 dark:text-gray-300 mb-6">We specialize in delivering expert services for Diesel Generators,<br /> Marine and Industrial Machinery, Forklifts, Construction and Agricultural Equipment,<br />Locomotive Engines, and Chassis Repairs  including servicing, overhauls, re-manufacturing, and spare parts.</p>
+          <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-4xl mx-auto font-bold text-xl">"Experience is the currency of engineering. You can buy gold, but you cannot buy the decades of
+            expertise earned in the field. At Hannovers, we don’t just bring tools; we bring the wisdom of a
+            thousand solved problems."</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {servicesData.slice(0, 3).map((s) => (
@@ -441,9 +461,9 @@ export default function App() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="bg-gray-100 dark:bg-industrial-800 py-20 relative overflow-hidden">
-        {/* Animated Background SVG */}
-        <svg className="absolute top-0 right-0 opacity-10 pointer-events-none" width="400" height="400" viewBox="0 0 100 100">
+      {/* <section className="bg-gray-100 dark:bg-industrial-800 py-20 relative overflow-hidden"> */}
+      {/* Animated Background SVG */}
+      {/* <svg className="absolute top-0 right-0 opacity-10 pointer-events-none" width="400" height="400" viewBox="0 0 100 100">
           <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="2" fill="none" className="text-blue-500 animate-spin-slow" strokeDasharray="10 5" />
         </svg>
 
@@ -473,6 +493,98 @@ export default function App() {
             </div>
           </div>
         </div>
+      </section> */}
+
+      {/* OUR PROMISE - Philosophy & Gallery Introduction */}
+      <section className="bg-white dark:bg-industrial-900 py-20">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-900 dark:text-white mb-12">OUR PROMISE</h2>
+          <p className="text-xl md:text-2xl text-center text-gray-700 dark:text-gray-300 mb-16 max-w-4xl mx-auto font-semibold">
+            "You can buy gold, but you can't buy experience. Our skills are forged in the heat of the moment, in the harshest environments. When things get tough, we get to work."
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            {/* Left Column */}
+            <div className="bg-gray-50 dark:bg-industrial-800 p-8 rounded-xl">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Experience over Gold</h3>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                Our gallery is not a photoshoot; it is a testament. Every image you see was captured by a technician on-site—a witness to the precision, sweat, and problem-solving that defines our true story. This is engineering in its rawest, most reliable form.
+              </p>
+            </div>
+
+            {/* Right Column */}
+            <div className="bg-gray-50 dark:bg-industrial-800 p-8 rounded-xl">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Forged in the Field</h3>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                Skills forged in the heat of the moment. We believe that experience gained in the harshest environments is worth double. When the situation is tough, our team is at its best.
+              </p>
+            </div>
+            <div className="md:col-span-2 flex flex-col items-center mt-12">
+              <div className="flex justify-center gap-6 mb-12 flex-wrap">
+                {galleryData.slice(0, 6).map((project) => (
+                  <div key={project.id} className="relative w-full max-w-[300px] aspect-[3/2] rounded-xl overflow-hidden shadow-xl group">
+                    <img
+                      src={project.image}
+                      alt={project.category}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  </div>
+                ))}
+              </div>
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => navigateTo(Page.GALLERY)}
+                className="px-12"
+              >
+                View Full Gallery <ArrowRight size={20} />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* The Witness Gallery */}
+      <section className="bg-gray-100 dark:bg-industrial-800 py-20">
+        {/* <div className="container mx-auto px-6"> */}
+        {/* <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-900 dark:text-white mb-6">The Witness Gallery</h2>
+          <p className="text-lg md:text-xl text-center text-gray-700 dark:text-gray-300 mb-12 max-w-4xl mx-auto">
+            "Every image in our gallery tells a true story. These aren't staged photoshoots; they are 'witness photos' taken by the very technicians who attended the site. This is our reality: grease, precision, and problems solved."
+          </p> */}
+
+        {/* Gallery Grid */}
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {galleryData.slice(0, 9).map((project) => (
+              <div key={project.id} className="relative rounded-xl overflow-hidden shadow-lg group cursor-pointer h-64">
+                <img
+                  src={project.image}
+                  alt={project.title || "Engineering work"}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </div>
+            ))}
+          </div> */}
+
+        {/* Engineering in Motion - YouTube Section */}
+        <div className="bg-white dark:bg-industrial-900 rounded-2xl p-8 md:p-12 text-center max-w-4xl mx-auto">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Youtube className="text-red-600" size={40} />
+            <h3 className="text-3xl font-bold text-gray-900 dark:text-white">Engineering in Motion</h3>
+          </div>
+          <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
+            See our technicians in action. Watch the technical precision behind our major overhauls and field repairs.
+          </p>
+          <Button
+            size="lg"
+            onClick={() => setIsYoutubeOpen(true)}
+            className="mx-auto"
+          >
+            <Youtube size={20} className="mr-2" />
+            Watch Our Process
+          </Button>
+        </div>
+        {/* </div> */}
       </section>
 
       {/* Testimonials */}
@@ -506,7 +618,7 @@ export default function App() {
       <section className="bg-industrial-900 text-white py-16">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold mb-6">Need Urgent Engineering Assistance?</h2>
-          <p className="text-gray-400 mb-8 max-w-2xl mx-auto">Our rapid response teams are ready to deploy worldwide. Minimizing downtime is our priority.</p>
+          <p className="text-gray-400 mb-8 max-w-2xl mx-auto">Our rapid response teams are ready to deploy in the island. Minimizing downtime is our priority.</p>
           <div className="flex justify-center gap-4">
             <Button variant="outline" size="lg" onClick={() => navigateTo(Page.CONTACT)}>
               Contact Support
@@ -520,7 +632,7 @@ export default function App() {
   const AboutPage = ({ navigateTo }: PageProps) => (
     <div className="pb-24 pt-20">
       <div className="h-96 relative bg-gray-900 flex items-center justify-center">
-        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2070" className="absolute inset-0 w-full h-full object-cover opacity-30" />
+        <img src="/landing3.jpg" className="absolute inset-0 w-full h-full object-cover opacity-30" />
         <div className="relative z-10 text-center">
           <h1 className="text-5xl font-heading font-bold text-white mb-4">About Hannovers</h1>
           <p className="text-xl text-gray-300">Building the future since 2010</p>
@@ -555,8 +667,8 @@ export default function App() {
           <SectionHeader title="Our Journey" subtitle="Milestones" centered />
           <div className="flex overflow-x-auto gap-8 pb-8 hide-scrollbar justify-center">
             {[
-              { year: '2010', title: 'Founded', desc: 'Started as a small Engineering \nservice Provider in Hannover.' },
-              { year: '2010-2026', title: 'Growth', desc: 'Expanded our services to include \ncomprehensive industrial solutions.' },
+              { year: '2010', title: 'Founded', desc: 'Establishing a proven track record with \nsome of the industry’s most respected names.' },
+              { year: 'Since 2010', title: 'Growth', desc: 'Building on our foundation of expert generator services, \nwe have expanded into a comprehensive provider of \ndiverse industrial solutions.' },
               { year: 'Future', title: 'We are Aiming,', desc: 'Aiming to provide engineering \nservices with emerging technologies \nfor all of your need.' }
             ].map((item, i) => (
               <div key={i} className="min-w-[250px]">
@@ -575,9 +687,9 @@ export default function App() {
           <SectionHeader title="Our Team" subtitle="Experts" centered />
           <div className="flex flex-col lg:flex-row items-stretch justify-center gap-8">
             <img src="team.png" className="rounded-xl shadow-lg w-full lg:w-1/3 object-cover" alt="Engineering Team" />
-            <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[500px] flex-1">
+            <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[450px] flex-1">
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                Our maintenance and servicing teams are composed of highly skilled Service staff with comprehensive expertise in mechanical, electrical, pneumatic, hydraulic, and automation systems. Our team provides an efficient and professional service to clients across the island. We are the trusted experts who understand your machinery from the inside out.
+                Our maintenance and servicing teams are composed of highly skilled personnel with comprehensive expertise in mechanical, electrical, pneumatic, hydraulic, and automation systems. Our team provides an efficient and professional service to clients across the island, ensuring that your operations remain seamless and productive. We are the trusted experts who understand your machinery from the inside out, allowing us to diagnose complex issues with precision and speed.
               </p>
             </Card>
           </div>
@@ -593,7 +705,7 @@ export default function App() {
               We specialise in end-to-end services for Diesel Generators and Marine Generators, ensuring peak performance and 24/7 reliability across the nation. <br /> <br />
               We specialize in power generation and preventive maintenance, supplying generator controllers, alternators, and spare parts trusted by industries nationwide for their quality and dependability.
             </p>
-            <Button onClick={() => navigateTo(Page.PROJECTS)} className="px-2 w-fit mx-auto">See Our Experience</Button>
+            <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
           </Card>
           <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
             <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><Anchor /> Marine, Industrial & Construction</h2>
@@ -606,7 +718,7 @@ export default function App() {
               <li>Construction Machinery: Comprehensive service, repairs, and <span className="ml-5">genuine spare parts.</span></li>
 
             </ul>
-            <Button onClick={() => navigateTo(Page.PROJECTS)} className="px-2 w-fit mx-auto">See Our Experience</Button>
+            <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
           </Card>
           <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col  max-w-[600px] ">
             <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><Truck /> Specialised Vehicles & Engines</h2>
@@ -614,7 +726,7 @@ export default function App() {
               We are equipped to handle a variety of specialised and commercial vehicles, including airport fire trucks, aircraft towing vehicles, and fire rescue vehicles.
               Our services cover everything from standard maintenance to complete overhauls.
             </p>
-            <Button onClick={() => navigateTo(Page.PROJECTS)} className="px-2 w-fit mx-auto mt-14">See Our Experience</Button>
+            <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto mt-14">See Our Experience</Button>
           </Card>
           <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
             <h2 className="text-3xl font-bold text-center text-industrial-900 dark:text-white mb-6 flex items-center  justify-center gap-2"><Wrench /> Other Specialised Services</h2>
@@ -627,10 +739,10 @@ export default function App() {
               <li>Heavy Diesel Engine Repairs: Comprehensive service, repair, <span className="ml-5">and overhauls.</span></li>
               <li>Health Reports: In-depth diagnostics and health reports for <span className="ml-5">generators and other machinery.</span></li>
             </ul>
-            <Button onClick={() => navigateTo(Page.PROJECTS)} className="px-2 w-fit mx-auto">See Our Experience</Button>
+            <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
           </Card>
           <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
-            <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><ToolCase /> Sales and Spares</h2>
+            <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><Cog /> Sales and Spares</h2>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
               We are a leading supplier of genuine and quality parts for a wide range of machinery and engines. Our inventory includes:
             </p>
@@ -640,7 +752,7 @@ export default function App() {
               <li>Industrial Machinery</li>
               <li>Specialized Vehicle Support</li>
             </ul>
-            <Button onClick={() => navigateTo(Page.PROJECTS)} className="px-2 w-fit mx-auto">See Our Experience</Button>
+            <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
           </Card>
         </div>
       </div>
@@ -657,8 +769,8 @@ export default function App() {
           {[
             { icon: Anchor, label: 'Marine' },
             { icon: Zap, label: 'Power' },
-            { icon: Truck, label: 'Heavy' },
-            { icon: Settings, label: 'Parts' },
+            { icon: Truck, label: 'Heavy Vehicles' },
+            { icon: Settings, label: 'Services' },
           ].map((cat, i) => (
             <div key={i} className="flex flex-col items-center gap-2 text-gray-400 hover:text-industrial-accent cursor-pointer transition-colors">
               <div className="p-3 bg-gray-100 dark:bg-slate-800 rounded-full">
@@ -692,6 +804,41 @@ export default function App() {
     onClose: () => void;
     navigateTo: (page: Page) => void;
   }
+
+  const YoutubeModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+    if (!isOpen) return null;
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
+      >
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          onClick={(e) => e.stopPropagation()}
+          className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl"
+        >
+          <button
+            onClick={onClose}
+            className="absolute -top-12 right-0 text-white hover:text-industrial-accent transition-colors"
+          >
+            <X size={32} />
+          </button>
+          <iframe
+            className="w-full h-full"
+            src="https://www.youtube.com/embed/videoseries?list=PLyxxxxxxxxxxxxxxx" // Replace with actual playlist or video ID if provided
+            title="Hannovers Engineering in Motion"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe>
+        </motion.div>
+      </motion.div>
+    );
+  };
 
   const ServiceModal = ({ service, onClose, navigateTo }: ServiceModalProps) => {
     return (
@@ -769,15 +916,18 @@ export default function App() {
 
   const ProjectsPage = ({ navigateTo }: PageProps) => {
     const [filter, setFilter] = useState('All');
-    const filteredProjects = filter === 'All' ? projectsData : projectsData.filter(p => p.category === filter);
+    const filteredProjects = filter === 'All' ? galleryData : galleryData.filter(p => p.category === filter);
 
     return (
       <div className="pt-24 pb-24">
         <div className="container mx-auto px-6">
-          <SectionHeader title="Our Projects" subtitle="Case Studies" centered />
+          <SectionHeader title="Our Gallery" subtitle="Case Studies" centered />
+          <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg py-4 text-center max-w-5xl mx-auto">Our gallery is not a photoshoot; it is a testament. Every image you see was captured by a 
+technician on-site a witness to the precision, sweat, and problem-solving that defines our true 
+story. This is engineering in its rawest, most reliable form.</p>
 
           <div className="flex justify-center gap-2 mb-12 flex-wrap">
-            {['All', 'Marine', 'Power Systems', 'Vehicles', 'Industrial'].map((f) => (
+            {['All', 'Power Generators', 'Marine Services', ' Specialised Aviation & Fleet Support', 'Heavy Vehicles', 'Industrial Machineries', 'Sales & Components'].map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
@@ -793,7 +943,7 @@ export default function App() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProjects.map((p) => (
-              <div key={p.id} className="group relative rounded-xl overflow-hidden cursor-pointer h-80">
+              <div key={p.id} className="group relative rounded-xl overflow-hidden cursor-pointer aspect-[3/2]">
                 <img src={p.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-industrial-900 via-transparent to-transparent opacity-80"></div>
                 <div className="absolute bottom-0 left-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform">
@@ -818,64 +968,25 @@ export default function App() {
             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
           </div>
         </div>
+        
       </div>
     );
   };
 
 
 
-  // const CareersPage = () => (
-  //   <div className="pt-20 pb-24">
-  //     <div className="relative h-80 bg-industrial-900 flex items-center justify-center mb-16">
-  //        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=2070" className="absolute inset-0 w-full h-full object-cover opacity-20" />
-  //        <div className="relative z-10 text-center px-4">
-  //           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Join Our Team</h1>
-  //           <p className="text-xl text-gray-300">Build your future with Hannover's.</p>
-  //        </div>
-  //     </div>
-
-  //     <div className="container mx-auto px-6">
-  //       <SectionHeader title="Open Positions" subtitle="Careers" />
-
-  //       <div className="space-y-4 mb-20">
-  //          {jobsData.map((job) => (
-  //            <div key={job.id} className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md flex flex-col md:flex-row justify-between items-center border-l-4 border-transparent hover:border-industrial-highlight transition-all">
-  //               <div>
-  //                  <h3 className="text-xl font-bold dark:text-white">{job.title}</h3>
-  //                  <div className="flex gap-4 text-sm text-gray-500 mt-2">
-  //                     <span className="flex items-center gap-1"><MapPin size={14} /> {job.location}</span>
-  //                     <span className="flex items-center gap-1"><Clock size={14} /> {job.type}</span>
-  //                  </div>
-  //               </div>
-  //               <Button variant="outline" size="sm" className="mt-4 md:mt-0">Apply Now</Button>
-  //            </div>
-  //          ))}
-  //       </div>
-
-  //       <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-  //          {[
-  //            { title: 'Growth', icon: TrendingUp },
-  //            { title: 'Safety', icon: ShieldCheck },
-  //            { title: 'Innovation', icon: Zap },
-  //            { title: 'Recognition', icon: Award },
-  //          ].map((val, i) => (
-  //            <div key={i} className="text-center">
-  //               <div className="w-16 h-16 bg-blue-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
-  //                  <val.icon className="text-blue-600 dark:text-blue-400" size={32} />
-  //               </div>
-  //               <h4 className="font-bold dark:text-white">{val.title}</h4>
-  //            </div>
-  //          ))}
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
+ 
 
   return (
     <div className={`min-h-screen transition-colors duration-500  ${isDarkMode ? 'dark bg-industrial-900' : 'bg-gray-50'}`}>
 
+      {/* Top Banner for 24/7 Support */}
+      {/* <div className="bg-industrial-accent text-white py-1 px-6 text-center text-xs md:text-sm font-medium sticky top-0 z-[60]">
+        Priority 24/7 Support: Dedicated emergency response for our contract partners and long-term clients.
+      </div> */}
+
       {/* Sticky Header */}
-      <header className={`fixed  top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 dark:bg-industrial-900/90 shadow-md backdrop-blur-md py-3' : 'bg-transparent py-6'}`}>
+      <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90  shadow-md backdrop-blur-md py-3' : 'bg-white py-3'}`}>
         <div className="container mx-auto px-6 flex justify-between items-center">
           <div
             className="flex items-center gap-2 cursor-pointer"
@@ -884,9 +995,9 @@ export default function App() {
             {/* <div className="bg-industrial-highlight p-2 rounded-lg">
               <Settings className="text-white animate-spin-slow" size={24} />
             </div> */}
-            <img src="logo2.png" alt="logo" width={400} height={400} className='rounded-xl bg-gray-50 p-4 w-48 lg:w-[400px] h-auto' />
-            <div className='hidden lg:block text-2xl font-bold text-corporate-primary pl-4'>HANNOVERS ENGINEERING PRIVATE LIMITED <br />
-              <span className='text text-white' style={{ fontFamily: "'Dancing Script', cursive" }}>Synchronizing to your Pulse</span>
+            <img src="logo2.png" alt="logo" width={400} height={400} className='rounded-xl  p-4 w-40 lg:w-[300px] h-auto' />
+            <div className='hidden lg:block text-xl font-bold text-corporate-primary pl-4'>HANNOVERS ENGINEERING PRIVATE LIMITED <br />
+              <span className='text text-industrial-700' style={{ fontFamily: "'Dancing Script', cursive" }}>Synchronizing to your Pulse</span>
             </div>
           </div>
 
@@ -896,15 +1007,16 @@ export default function App() {
               { label: 'Home', page: Page.HOME },
               { label: 'About', page: Page.ABOUT },
               { label: 'Services', page: Page.SERVICES },
-              { label: 'Projects', page: Page.PROJECTS },
+              { label: 'Gallery', page: Page.GALLERY, isSupport: false },
+              // { label: '', page: Page.HOME, isSupport: true },
               // { label: 'Careers', page: Page.CAREERS },
               { label: 'Contact', page: Page.CONTACT },
             ].map((item) => (
               <button
                 key={item.label}
-                onClick={() => navigateTo(item.page)}
-                className={`text-sm font-medium uppercase tracking-wide hover:text-industrial-accent transition-colors ${isScrolled ? 'text-gray-700 dark:text-gray-300' : 'text-gray-200'
-                  } ${currentPage === item.page ? 'text-industrial-accent' : ''}`}
+                onClick={() => item.isSupport ? window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }) : navigateTo(item.page as Page)}
+                className={`text-sm font-medium uppercase tracking-wide hover:text-industrial-accent transition-colors ${isScrolled ? ' dark:text-industrial-700' : 'text-industrial-800'
+                  } ${!item.isSupport && currentPage === item.page ? 'text-industrial-accent' : ''}`}
               >
                 {item.label}
               </button>
@@ -941,13 +1053,20 @@ export default function App() {
               { label: 'Home', page: Page.HOME },
               { label: 'About', page: Page.ABOUT },
               { label: 'Services', page: Page.SERVICES },
-              { label: 'Projects', page: Page.PROJECTS },
-              // { label: 'Careers', page: Page.CAREERS },
+              { label: 'Gallery', page: Page.GALLERY },
+              { label: 'Client Support', page: Page.HOME, isSupport: true },
               { label: 'Contact', page: Page.CONTACT },
             ].map((item) => (
               <button
                 key={item.label}
-                onClick={() => navigateTo(item.page)}
+                onClick={() => {
+                  if (item.isSupport) {
+                    setIsMenuOpen(false);
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                  } else {
+                    navigateTo(item.page as Page);
+                  }
+                }}
                 className="text-left text-white text-lg py-2 border-b border-gray-800"
               >
                 {item.label}
@@ -963,7 +1082,7 @@ export default function App() {
         {currentPage === Page.HOME && <HomePage navigateTo={navigateTo} handleServiceClick={handleServiceClick} />}
         {currentPage === Page.ABOUT && <AboutPage navigateTo={navigateTo} />}
         {currentPage === Page.SERVICES && <ServicesPage navigateTo={navigateTo} handleServiceClick={handleServiceClick} />}
-        {currentPage === Page.PROJECTS && <ProjectsPage navigateTo={navigateTo} />}
+        {currentPage === Page.GALLERY && <ProjectsPage navigateTo={navigateTo} />}
         {currentPage === Page.CONTACT && (
           <ContactPage
             handleFormSubmit={handleFormSubmit}
@@ -983,6 +1102,12 @@ export default function App() {
             navigateTo={navigateTo}
           />
         )}
+        {isYoutubeOpen && (
+          <YoutubeModal
+            isOpen={isYoutubeOpen}
+            onClose={() => setIsYoutubeOpen(false)}
+          />
+        )}
       </AnimatePresence>
 
       {/* Footer */}
@@ -990,7 +1115,7 @@ export default function App() {
         <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
             <div className="flex items-center gap-2 mb-6">
-              <img src="logo.png" alt="logo" className='w-48 bg-white p-2 rounded-xl w-64 h-28' />
+              <img src="logo2.png" alt="logo" className=' bg-white p-2 rounded-xl w-60' />
             </div>
             <p className="mb-6">
               Our mission is to keep your machinery,fleets and plants in constant motion.Through expert, up-to-date maintenance, We minimize downtime and ensure your operations run smoothly, 24/7.
@@ -998,8 +1123,7 @@ export default function App() {
             <div className="flex gap-4">
               <a href="" target="_blank"><Linkedin className="hover:text-white cursor-pointer" /></a>
               <a href="https://www.facebook.com/hannoversengineering/" target="_blank"><Facebook className="hover:text-white cursor-pointer" /></a>
-              <a href="" target="_blank"><Instagram className="hover:text-white cursor-pointer" /></a>
-              <a href="" target="_blank"><Youtube className="hover:text-white cursor-pointer" width={28} height={28} /></a>
+              <a href="https://www.youtube.com/@hannoversengineering5223" target="_blank"><Youtube className="hover:text-white cursor-pointer" width={28} height={28} /></a>
             </div>
           </div>
           <div>
@@ -1023,7 +1147,7 @@ export default function App() {
               {[
                 { label: 'Home', page: Page.HOME },
                 { label: 'About', page: Page.ABOUT },
-                { label: 'Projects', page: Page.PROJECTS },
+                { label: 'Gallery', page: Page.GALLERY },
                 { label: 'Contact', page: Page.CONTACT },
               ].map((link) => (
                 <li key={link.label}>
@@ -1033,18 +1157,39 @@ export default function App() {
             </ul>
           </div>
           <div>
-            <h4 className="text-white font-bold mb-6">Contact</h4>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3"><MapPin size={20} className="mt-1" /> 102/159, Madara Gardens, <br />Mattegoda, 10240. Sri Lanka</li>
-              <li className="flex items-center gap-3"><Phone size={20} /> +94 77 382 9924</li>
-              <li className="flex items-center gap-3"><Mail size={20} /> hellohnvrs@gmail.com</li>
-              <li className="flex items-center gap-3"><Youtube size={20} /> <a href="" target="_blank" className="hover:text-white">Visit our YouTube Channel</a></li>
-            </ul>
+            <h4 className="text-white font-bold mb-6">Contact Information</h4>
+            <div className="space-y-6">
+              <div>
+                <h5 className="text-industrial-accent font-semibold mb-2 flex items-center gap-2"><Globe size={16} /> Sri Lanka Operations</h5>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3 text-sm"><MapPin size={18} className="mt-1 shrink-0" /> 102/159, Madara Gardens, Mattegoda, 10240. Sri Lanka</li>
+                  <li className="flex items-center gap-3 text-sm"><Phone size={18} /> +94 77 382 9924</li>
+                </ul>
+              </div>
+              {/* <div>
+                <h5 className="text-industrial-accent font-semibold mb-2 flex items-center gap-2"><Globe size={16} /> Australia Presence</h5>
+                <ul className="space-y-3">
+                  <li className="flex items-center gap-3 text-sm"><MapPin size={18} /> Serving Australian Industrial & Maritime Sectors</li>
+                  <li className="flex items-center gap-3 text-sm"><Mail size={18} /> hellohnvrs@gmail.com</li>
+                </ul>
+              </div> */}
+            </div>
           </div>
 
         </div>
-        <div className="container mx-auto px-6 mt-16 pt-8 border-t border-gray-800 text-center text-sm">
-          &copy; 2026 Hannovers Engineering | All Right Reserved
+
+        {/* Priority 24/7 Support Section */}
+        <div className="container mx-auto px-6 mt-12 pt-8 border-t border-gray-800">
+          <div className="bg-industrial-accent/10 border border-industrial-accent/30 rounded-xl p-6 text-center">
+            <h4 className="text-white font-bold text-xl mb-2">Priority 24/7 Support</h4>
+            <p className="text-gray-300">
+              Dedicated emergency response for our contract partners and long-term clients.
+            </p>
+          </div>
+        </div>
+
+        <div className="container mx-auto px-6 mt-8 pt-8 border-t border-gray-800 text-center text-sm">
+          &copy; 2020 Hannovers Engineering | All Right Reserved
         </div>
       </footer>
 
