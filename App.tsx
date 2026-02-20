@@ -738,7 +738,15 @@ const ServiceModal = ({ service, onClose, navigateTo }: ServiceModalProps) => {
 
 const ProjectsPage = ({ navigateTo }: PageProps) => {
   const [filter, setFilter] = useState('All');
+  const [visibleCount, setVisibleCount] = useState(20);
+
   const filteredProjects = filter === 'All' ? galleryData : galleryData.filter(p => p.category === filter);
+  const displayedProjects = filteredProjects.slice(0, visibleCount);
+
+  const handleFilterChange = (newFilter: string) => {
+    setFilter(newFilter);
+    setVisibleCount(20);
+  };
 
   return (
     <div className="pt-24 pb-24">
@@ -752,7 +760,7 @@ const ProjectsPage = ({ navigateTo }: PageProps) => {
           {['All', 'Power Generators', 'Marine Services', 'Specialised Aviation & Fleet Support', 'Heavy Vehicles', 'Industrial Machineries', 'Sales & Components'].map((f) => (
             <button
               key={f}
-              onClick={() => setFilter(f)}
+              onClick={() => handleFilterChange(f)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === f
                 ? 'bg-industrial-accent text-white shadow-lg'
                 : 'bg-gray-200 dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-300'
@@ -764,7 +772,7 @@ const ProjectsPage = ({ navigateTo }: PageProps) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProjects.map((p) => (
+          {displayedProjects.map((p) => (
             <div key={p.id} className="group relative rounded-xl overflow-hidden cursor-pointer aspect-[3/2]">
               <img src={p.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
               <div className="absolute inset-0 bg-gradient-to-t from-industrial-900 via-transparent to-transparent opacity-80"></div>
@@ -780,6 +788,18 @@ const ProjectsPage = ({ navigateTo }: PageProps) => {
             </div>
           ))}
         </div>
+
+        {visibleCount < filteredProjects.length && (
+          <div className="mt-12 flex justify-center">
+            <Button
+              size="lg"
+              onClick={() => setVisibleCount(prev => prev + 20)}
+              className="px-12 py-6 text-lg"
+            >
+              Load More
+            </Button>
+          </div>
+        )}
 
         <div className="mt-20 bg-industrial-900 rounded-3xl p-12 text-center relative overflow-hidden">
           <div className="relative z-10">
