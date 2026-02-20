@@ -12,7 +12,7 @@ export const servicesData: Service[] = [
     tagline: 'Uninterrupted energy for industry.',
     description: 'From 500kVA to 2MVA, we provide end-to-end lifecycle support for power systems. Our expertise covers preventive maintenance, alternator insulation upgrades, and high-capacity radiator servicing to ensure your facility never goes dark.',
     image: 'generator.jpg',
-    icon: Zap,
+    icon: 'generator.png',
     detail: 'From 500kVA to 2MVA, we provide end-to-end lifecycle support for power systems. Our expertise covers preventive maintenance, alternator insulation upgrades, and high-capacity radiator servicing to ensure your facility never goes dark.',
     features: ['Preventive Service', 'Alternator Rewinds', 'Control Panels', 'Radiators/Cooling', 'Power Rentals', 'Spareparts', '24/7 Support']
   },
@@ -22,7 +22,7 @@ export const servicesData: Service[] = [
     tagline: 'Mission-critical repairs for maritime sector.',
     description: 'Providing mission-critical repairs for the maritime sector. We specialize in the overhaul of marine diesel engines for offshore supply vessels, tugs, and commercial fishing fleets, keeping your propulsion systems reliable in open water.',
     image: 'marine.jpg',
-    icon: Anchor,
+    icon: 'marine.png',
     detail: 'Providing mission-critical repairs for the maritime sector. We specialize in the overhaul of marine diesel engines for offshore supply vessels, tugs, and commercial fishing fleets, keeping your propulsion systems reliable in open water.',
     features: ['Marine Diesel Engine Servicing', 'Engine overhauls', 'Marine Equipment and unit repairs', 'Emergency Marine repairs', 'Spare parts']
   },
@@ -32,7 +32,7 @@ export const servicesData: Service[] = [
     tagline: 'Trusted by Air Forces and Airport Authorities.',
     description: 'Trusted by Air Forces and Airport Authorities. We deliver specialised engineering for aircraft fire trucks, Towing Vehicles, Refuelling bowsers, and ground power units. Our service includes everything from chassis structural repairs to complete engine overhauls.',
     image: 'vehicle.JPG',
-    icon: Plane,
+    icon: 'specialised.png',
     detail: 'Trusted by Air Forces and Airport Authorities. We deliver specialised engineering for aircraft fire trucks, Towing Vehicles, Refuelling bowsers, and ground power units. Our service includes everything from chassis structural repairs to complete engine overhauls.',
     features: ['Airport Ground Support', 'Heavy Construction Equipment', 'Specialised Tyres', 'Chassis & Dent Repairs', 'Spare Parts Supply']
   },
@@ -42,7 +42,7 @@ export const servicesData: Service[] = [
     tagline: 'Restoring power and precision.',
     description: 'Restoring power and precision to your most heavy-duty assets. We specialize in the technical mastery required to maximize the lifespan of industrial equipment, providing everything from major engine overhauls to advanced on-site diagnostics.',
     image: 'heavy.png',
-    icon: Tractor,
+    icon: 'heavy2.png',
     detail: 'Restoring power and precision to your most heavy-duty assets. We specialize in the technical mastery required to maximize the lifespan of industrial equipment, providing everything from major engine overhauls to advanced on-site diagnostics.',
     features: ['Full Engine Overhauls & Re-manufacturing', 'Preventive maintenance', 'Advanced Mechanical Diagnostics', 'Component-Level Unit Repairs', 'On-Call Emergency Technical Support', 'Strategic Parts Supply & Logistics']
   },
@@ -50,11 +50,11 @@ export const servicesData: Service[] = [
     id: 'industrial-plant',
     title: 'Industrial, Plant, & Agriculture Machinery Solutions',
     tagline: 'Engineered for endurance across every terrain.',
-    description: 'Engineered for endurance across every terrain. We provide comprehensive lifecycle support for industrial plants and agricultural machinery, ensuring that your critical equipment from construction fleets to diesel tractors operates with seamless reliability in the toughest conditions.',
+    description: 'Engineered for endurance across every terrain. We provide comprehensive lifecycle support for industrial plants and agricultural machinery, ensuring that your critical equipment—from construction fleets to diesel tractors—operates with seamless reliability in the toughest conditions.',
     image: 'industrial.jpg',
-    icon: Wrench,
+    icon: 'industrial.png',
     detail: 'Engineered for endurance across every terrain. We provide comprehensive lifecycle support for industrial plants and agricultural machinery, ensuring that your critical equipment—from construction fleets to diesel tractors—operates with seamless reliability in the toughest conditions.',
-    features: ['Industrial Plant Servicing & Unit Repairs', 'Industrial Diesel Engine & Machinery', 'Agriculture Diesel Engines & Machinery', 'Diesel Forklift Maintenance & Support', 'Heavy Construction & Earthmoving Machinery', 'Advanced Cooling Systems & Engine Radiators', 'Machinery Health Monitoring & Diagnostics', 'Genuine Spares & Precision Tools']
+    features: ['Industrial Plant Servicing & Unit Repairs', 'Industrial Diesel Engine & Machinery', 'Agriculture Diesel Engines & Machinery', 'Diesel Forklift Maintenance & Support','Container Handling Equipment', 'Construction & Earthmoving Machinery', 'Advanced Cooling Systems & Engine Radiators', 'Machinery Health Monitoring & Diagnostics', 'Genuine Spares & Precision Tools']
   },
   {
     id: 'parts',
@@ -62,7 +62,7 @@ export const servicesData: Service[] = [
     tagline: 'Precision components for mission-critical performance.',
     description: 'Precision components for mission-critical performance. We supply high-grade parts specifically engineered for the power and industrial sectors, ensuring that your systems are always supported by genuine, high-performance hardware.',
     image: 'service.jpg',
-    icon: Package,
+    icon:'spare.png',
     detail: 'Precision components for mission-critical performance. We supply high-grade parts specifically engineered for the power and industrial sectors, ensuring that your systems are always supported by genuine, high-performance hardware.',
     features: ['Diesel Generator Control Modules', 'Generator & Industrial Electrical parts', 'Industrial Electrical & Synchronization Parts', 'High-Performance Turbochargers', 'Heavy-Duty Generator & Industrial Radiators']
   }

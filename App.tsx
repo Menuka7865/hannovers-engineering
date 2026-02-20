@@ -19,7 +19,7 @@ import {
   Cog
 } from 'lucide-react';
 import emailjs from '@emailjs/browser';
-import { motion, useMotionValue, useSpring, useTransform, useInView, animate, AnimatePresence } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform, useInView, animate, AnimatePresence, isGenerator } from 'framer-motion';
 import { Page, Service, Project } from './types';
 import { servicesData, galleryData, jobsData, testimonials } from './data';
 import { Button, Card, SectionHeader } from './components/Components';
@@ -98,14 +98,11 @@ const ServiceCard = ({ service, handleServiceClick }: ServiceCardProps) => (
         alt={service.title}
         className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
       />
-      <div className="absolute inset-0 bg-blue-900/0 group-hover:bg-blue-900/40 transition-colors duration-300 flex items-center justify-center">
-        <service.icon size={48} className="text-white opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300" />
-      </div>
+      {/* <div className="absolute inset-0 bg-blue-900/0 group-hover:bg-blue-900/40 transition-colors duration-300 flex items-center justify-center">
+        <img src={service.icon} size={10} className="text-white opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300" />
+      </div> */}
     </div>
     <div className="p-6 flex flex-col flex-grow">
-      <div className="mb-4 text-industrial-accent dark:text-cyan-400">
-        <service.icon size={32} />
-      </div>
       <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{service.title}</h3>
       <p className="text-sm text-industrial-700 font-medium mb-4">{service.tagline}</p>
       <p className="text-gray-600 dark:text-gray-300 mb-6 flex-grow">{service.description}</p>
@@ -233,12 +230,12 @@ const ContactPage = ({ handleFormSubmit, formData, handleInputChange, submitStat
                   className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white appearance-none"
                 >
                   <option value="" disabled>Select Inquiry Type</option>
-                  <option value="Power & Generators">Power & Generators</option>
-                  <option value="Marine & Propulsion Services">Marine & Propulsion Services</option>
-                  <option value="Industrial Machinery">Industrial Machinery</option>
-                  <option value="Construction Machinery">Construction Machinery</option>
-                  <option value="Spare Parts">Spare Parts</option>
-                  <option value="Other">Other</option>
+                  <option value="Power & Generators">Power Generation & Energy Systems</option>
+                  <option value="Marine & Propulsion Services">Marine & Maritime Engineering</option>
+                  <option value="Industrial Machinery">Specialised Aviation & Fleet Support</option>
+                  <option value="Construction Machinery">Heavy Diesel & Industrial Solutions</option>
+                  <option value="Industrial, Plant, & Agriculture Machinery Solutions">Industrial, Plant, & Agriculture Machinery Solutions</option>
+                  <option value="Sales & Component Supply">Sales & Component Supply</option>
                 </select>
               </div>
             </div>
@@ -657,8 +654,8 @@ export default function App() {
             </div>
           </Card>
           <div className="grid grid-cols-2 gap-4">
-            <img src="hero1.JPG" className="rounded-xl shadow-lg w-full h-full object-cover" />
-            <img src="hero2.png" className="rounded-xl shadow-lg w-full h-full object-cover translate-y-8" />
+            <img src="guide.jpg" className="rounded-xl shadow-lg w-full h-full object-cover" />
+            <img src="hero3.jpg" className="rounded-xl shadow-lg w-full h-full object-cover translate-y-8" />
           </div>
         </div>
 
@@ -700,7 +697,7 @@ export default function App() {
         <div className="flex flex-wrap justify-center gap-8">
 
           <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
-            <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><Zap /> Power Generation</h2>
+            <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/generator.png" className="w-10 h-10" alt="generator" /></div> Power Generation</h2>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
               We specialise in end-to-end services for Diesel Generators and Marine Generators, ensuring peak performance and 24/7 reliability across the nation. <br /> <br />
               We specialize in power generation and preventive maintenance, supplying generator controllers, alternators, and spare parts trusted by industries nationwide for their quality and dependability.
@@ -708,7 +705,7 @@ export default function App() {
             <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
           </Card>
           <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
-            <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><Anchor /> Marine, Industrial & Construction</h2>
+            <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/marine.png" className="w-10 h-10" alt="generator" /></div> Marine, Industrial & Construction</h2>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
               Our expert technicians provide critical support for:
             </p>
@@ -721,7 +718,7 @@ export default function App() {
             <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
           </Card>
           <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col  max-w-[600px] ">
-            <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><Truck /> Specialised Vehicles & Engines</h2>
+            <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/specialised.png" className="w-10 h-10" alt="generator" /></div> Specialised Vehicles & Engines</h2>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
               We are equipped to handle a variety of specialised and commercial vehicles, including airport fire trucks, aircraft towing vehicles, and fire rescue vehicles.
               Our services cover everything from standard maintenance to complete overhauls.
@@ -729,7 +726,7 @@ export default function App() {
             <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto mt-14">See Our Experience</Button>
           </Card>
           <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
-            <h2 className="text-3xl font-bold text-center text-industrial-900 dark:text-white mb-6 flex items-center  justify-center gap-2"><Wrench /> Other Specialised Services</h2>
+            <h2 className="text-3xl font-bold text-center text-industrial-900 dark:text-white mb-6 flex items-center  justify-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/industrial.png" className="w-12 h-10" alt="generator" /></div> Other Specialised Services</h2>
             {/* <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
               We are a leading supplier of genuine and quality parts for a wide range of machinery and engines. Our inventory includes:
             </p> */}
@@ -742,7 +739,7 @@ export default function App() {
             <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
           </Card>
           <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
-            <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><Cog /> Sales and Spares</h2>
+            <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/spare.png" className="w-10 h-10" alt="generator" /></div> Sales and Spares</h2>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
               We are a leading supplier of genuine and quality parts for a wide range of machinery and engines. Our inventory includes:
             </p>
@@ -760,21 +757,23 @@ export default function App() {
   );
 
   const ServicesPage = ({ navigateTo, handleServiceClick }: HomePageProps) => (
-    <div className="pb-24 pt-20">
+    <div className="pb-24 pt-28">
       <div className="container mx-auto px-6">
         <SectionHeader title="Engineering Services" subtitle="What We Do" centered />
 
         {/* Filter Icons */}
         <div className="flex flex-wrap justify-center gap-6 mb-12">
           {[
-            { icon: Anchor, label: 'Marine' },
-            { icon: Zap, label: 'Power' },
-            { icon: Truck, label: 'Heavy Vehicles' },
-            { icon: Settings, label: 'Services' },
+            { icon: '/generator.png', label: 'Power' },
+            { icon: '/marine.png', label: 'Marine' },
+            { icon: '/specialised.png', label: 'Special Vehicle' },
+            { icon: '/heavy2.png', label: 'Heavy Diesel' },
+            { icon: '/industrial.png', label: 'Machineries' },
+            { icon: '/spare.png', label: 'Sales & Spares' },
           ].map((cat, i) => (
             <div key={i} className="flex flex-col items-center gap-2 text-gray-400 hover:text-industrial-accent cursor-pointer transition-colors">
-              <div className="p-3 bg-gray-100 dark:bg-slate-800 rounded-full">
-                <cat.icon size={24} />
+              <div className="p-3 bg-gray-100 dark:bg-white rounded-full w-16 h-16 flex items-center justify-center">
+                <img src={cat.icon} alt={cat.label} className="w-10 h-10 object-contain" />
               </div>
               <span className="text-sm font-medium">{cat.label}</span>
             </div>
@@ -829,7 +828,7 @@ export default function App() {
           </button>
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/videoseries?list=PLyxxxxxxxxxxxxxxx" // Replace with actual playlist or video ID if provided
+            src="https://www.youtube.com/embed/vB8gfB7E44g" // Hannovers Engineering in Motion video
             title="Hannovers Engineering in Motion"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -922,9 +921,9 @@ export default function App() {
       <div className="pt-24 pb-24">
         <div className="container mx-auto px-6">
           <SectionHeader title="Our Gallery" subtitle="Case Studies" centered />
-          <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg py-4 text-center max-w-5xl mx-auto">Our gallery is not a photoshoot; it is a testament. Every image you see was captured by a 
-technician on-site a witness to the precision, sweat, and problem-solving that defines our true 
-story. This is engineering in its rawest, most reliable form.</p>
+          <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg py-4 text-center max-w-5xl mx-auto">Our gallery is not a photoshoot; it is a testament. Every image you see was captured by a
+            technician on-site a witness to the precision, sweat, and problem-solving that defines our true
+            story. This is engineering in its rawest, most reliable form.</p>
 
           <div className="flex justify-center gap-2 mb-12 flex-wrap">
             {['All', 'Power Generators', 'Marine Services', ' Specialised Aviation & Fleet Support', 'Heavy Vehicles', 'Industrial Machineries', 'Sales & Components'].map((f) => (
@@ -968,14 +967,14 @@ story. This is engineering in its rawest, most reliable form.</p>
             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
           </div>
         </div>
-        
+
       </div>
     );
   };
 
 
 
- 
+
 
   return (
     <div className={`min-h-screen transition-colors duration-500  ${isDarkMode ? 'dark bg-industrial-900' : 'bg-gray-50'}`}>
@@ -1040,7 +1039,7 @@ story. This is engineering in its rawest, most reliable form.</p>
             {/* <button onClick={() => setIsDarkMode(!isDarkMode)} className="text-gray-400">
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button> */}
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={`text-2xl ${isScrolled ? 'text-gray-900 dark:text-white' : 'text-white'}`}>
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={`text-2xl ${isScrolled ? 'text-gray-900 dark:text-black' : 'text-black'}`}>
               {isMenuOpen ? <X /> : <Menu />}
             </button>
           </div>
