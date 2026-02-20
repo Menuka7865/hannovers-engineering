@@ -237,10 +237,10 @@ const ContactPage = ({ handleFormSubmit, formData, handleInputChange, submitStat
                   className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white appearance-none"
                 >
                   <option value="" disabled>Select Inquiry Type</option>
-                  <option value="Power & Generators">Power Generation & Energy Systems</option>
-                  <option value="Marine & Propulsion Services">Marine & Maritime Engineering</option>
-                  <option value="Industrial Machinery">Specialised Aviation & Fleet Support</option>
-                  <option value="Construction Machinery">Heavy Diesel & Industrial Solutions</option>
+                  <option value="Power Generation & Energy Systems">Power Generation & Energy Systems</option>
+                  <option value="Marine & Maritime Engineering">Marine & Maritime Engineering</option>
+                  <option value="Specialised Aviation & Fleet Support">Specialised Aviation & Fleet Support</option>
+                  <option value="Heavy Diesel & Industrial Solutions">Heavy Diesel & Industrial Solutions</option>
                   <option value="Industrial, Plant, & Agriculture Machinery Solutions">Industrial, Plant, & Agriculture Machinery Solutions</option>
                   <option value="Sales & Component Supply">Sales & Component Supply</option>
                 </select>
