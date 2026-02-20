@@ -749,7 +749,7 @@ const ProjectsPage = ({ navigateTo }: PageProps) => {
           story. This is engineering in its rawest, most reliable form.</p>
 
         <div className="flex justify-center gap-2 mb-12 flex-wrap">
-          {['All', 'Power Generators', 'Marine Services', ' Specialised Aviation & Fleet Support', 'Heavy Vehicles', 'Industrial Machineries', 'Sales & Components'].map((f) => (
+          {['All', 'Power Generators', 'Marine Services', 'Specialised Aviation & Fleet Support', 'Heavy Vehicles', 'Industrial Machineries', 'Sales & Components'].map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
