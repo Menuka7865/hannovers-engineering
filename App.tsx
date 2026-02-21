@@ -529,7 +529,7 @@ const AboutPage = ({ navigateTo }: PageProps) => (
       <div className="flex flex-wrap justify-center gap-8">
 
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
-          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/generator.png" className="w-10 h-10" alt="generator" /></div> Power Generation</h2>
+          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/generator.png" className="w-10 h-10" alt="generator" /></div>Power Generation & Energy Systems</h2>
           <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
             We specialise in end-to-end services for Diesel Generators and Marine Generators, ensuring peak performance and 24/7 reliability across the nation. <br /> <br />
             We specialize in power generation and preventive maintenance, supplying generator controllers, alternators, and spare parts trusted by industries nationwide for their quality and dependability.
@@ -537,7 +537,7 @@ const AboutPage = ({ navigateTo }: PageProps) => (
           <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
         </Card>
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
-          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/marine.png" className="w-10 h-10" alt="generator" /></div> Marine, Industrial & Construction</h2>
+          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/marine(3).png" className="w-10 h-10" alt="generator" /></div>Marine & Maritime Engineering</h2>
           <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
             Our expert technicians provide critical support for:
           </p>
@@ -550,15 +550,15 @@ const AboutPage = ({ navigateTo }: PageProps) => (
           <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
         </Card>
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col  max-w-[600px] ">
-          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/specialised.png" className="w-10 h-10" alt="generator" /></div> Specialised Vehicles & Engines</h2>
+          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/specialised.png" className="w-10 h-10" alt="generator" /></div>Specialised Aviation & Fleet Support</h2>
           <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
             We are equipped to handle a variety of specialised and commercial vehicles, including airport fire trucks, aircraft towing vehicles, and fire rescue vehicles.
             Our services cover everything from standard maintenance to complete overhauls.
           </p>
           <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto mt-14">See Our Experience</Button>
         </Card>
-        <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
-          <h2 className="text-3xl font-bold text-center text-industrial-900 dark:text-white mb-6 flex items-center  justify-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/industrial.png" className="w-12 h-10" alt="generator" /></div> Other Specialised Services</h2>
+        <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col  max-w-[600px] ">
+          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/industrial.png" className="w-12 h-10" alt="generator" /></div>Heavy Diesel & Industrial Solutions</h2>
           {/* <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
             We are a leading supplier of genuine and quality parts for a wide range of machinery and engines. Our inventory includes:
           </p> */}
@@ -571,15 +571,28 @@ const AboutPage = ({ navigateTo }: PageProps) => (
           <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
         </Card>
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
-          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/spare.png" className="w-10 h-10" alt="generator" /></div> Sales and Spares</h2>
+          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/heavy2.png" className="w-10 h-10" alt="generator" /></div>Industrial Machinery Solutions</h2>
           <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
-            We are a leading supplier of genuine and quality parts for a wide range of machinery and engines. Our inventory includes:
+            We deliver reliable lifecycle support for industrial and agricultural machinery, built to perform on any terrain. From construction fleets to diesel tractors, our solutions ensure long-lasting, seamless operation in even the harshest conditions.
           </p>
           <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mb-6 justify-center ml-6">
-            <li>Generators and Marine Propulsion</li>
-            <li>Heavy Construction Equipment</li>
-            <li>Industrial Machinery</li>
-            <li>Specialized Vehicle Support</li>
+            <li>Industrial Plant Servicing & Unit Repairs</li>
+            <li>Industrial Diesel Engine & Machinery</li>
+            <li>Diesel Forklift Maintenance & Support</li>
+            <li>Construction & Earthmoving Machinery</li>
+          </ul>
+          <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
+        </Card>
+        <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
+          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/spare.png" className="w-10 h-10" alt="generator" /></div> Sales and Spares</h2>
+          <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
+           Precision components for mission-critical performance. We supply high-grade parts specifically engineered for the power and industrial sectors, ensuring that your systems are always supported by genuine, high-performance hardware. 
+          </p>
+          <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mb-6 justify-center ml-6">
+            <li>Diesel Generator Control Modules</li>
+            <li>Generator & Industrial Electrical parts</li>
+            <li>Industrial Electrical & Synchronization Parts</li>
+            <li>High Performance Turbochargers</li>
           </ul>
           <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
         </Card>
@@ -597,7 +610,7 @@ const ServicesPage = ({ navigateTo, handleServiceClick, setIsYoutubeOpen }: Home
       <div className="flex flex-wrap justify-center gap-6 mb-12">
         {[
           { icon: '/generator.png', label: 'Power' },
-          { icon: '/marine.png', label: 'Marine' },
+          { icon: '/marine(3).png', label: 'Marine' },
           { icon: '/specialised.png', label: 'Special Vehicle' },
           { icon: '/heavy2.png', label: 'Heavy Diesel' },
           { icon: '/industrial.png', label: 'Machineries' },
