@@ -33,6 +33,7 @@ interface ServiceCardProps {
   key?: string;
   service: Service;
   handleServiceClick: (service: Service) => void;
+  openLightbox?: (image: string) => void;
 }
 
 interface CounterProps {
@@ -43,11 +44,17 @@ interface CounterProps {
 
 interface PageProps {
   navigateTo: (page: Page) => void;
+  openLightbox?: (image: string) => void;
 }
 
 interface HomePageProps extends PageProps {
   handleServiceClick: (service: Service) => void;
   setIsYoutubeOpen: (isOpen: boolean) => void;
+  openLightbox: (image: string) => void;
+}
+
+interface ProjectsPageProps extends PageProps {
+  openLightbox: (image: string) => void;
 }
 
 interface ContactPageProps {
@@ -57,6 +64,7 @@ interface ContactPageProps {
     designation: string;
     company: string;
     inquiryType: string;
+    customInquiry: string;
     email: string;
     message: string;
   };
@@ -80,7 +88,7 @@ const Hero = ({ navigateTo }: HeroProps) => (
       <img
         src="/landing1.jpg"
         alt="Rocker Levers Engineering"
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover "
       />
       <div className="absolute inset-0 bg-gradient-to-r from-industrial-900/90 to-industrial-800/70 mix-blend-multiply"></div>
     </div>
@@ -97,13 +105,14 @@ const Hero = ({ navigateTo }: HeroProps) => (
   </div>
 );
 
-const ServiceCard = ({ service, handleServiceClick }: ServiceCardProps) => (
+const ServiceCard = ({ service, handleServiceClick, openLightbox }: ServiceCardProps) => (
   <Card className="group bg-white dark:bg-industrial-800 shadow-xl border border-gray-100 dark:border-slate-700 hover:border-industrial-accent dark:hover:border-cyan-500 h-full flex flex-col relative">
     <div className="aspect-[3/2] overflow-hidden relative">
       <img
         src={service.image}
         alt={service.title}
-        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 cursor-pointer"
+        onClick={() => openLightbox && openLightbox(service.image)}
       />
       {/* <div className="absolute inset-0 bg-blue-900/0 group-hover:bg-blue-900/40 transition-colors duration-300 flex items-center justify-center">
         <img src={service.icon} size={10} className="text-white opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300" />
@@ -243,8 +252,23 @@ const ContactPage = ({ handleFormSubmit, formData, handleInputChange, submitStat
                   <option value="Heavy Diesel & Industrial Solutions">Heavy Diesel & Industrial Solutions</option>
                   <option value="Industrial, Plant, & Agriculture Machinery Solutions">Industrial, Plant, & Agriculture Machinery Solutions</option>
                   <option value="Sales & Component Supply">Sales & Component Supply</option>
+                  <option value="Other(please specify)">Other(please specify)</option>
                 </select>
               </div>
+              {formData.inquiryType === 'Other(please specify)' && (
+                <div className="space-y-2 col-span-2">
+                  <label className="text-sm font-medium dark:text-gray-300 animate-in fade-in slide-in-from-top-1 duration-300">Please specify your inquiry</label>
+                  <input
+                    type="text"
+                    name="customInquiry"
+                    required
+                    value={formData.customInquiry}
+                    onChange={handleInputChange}
+                    placeholder="Enter your inquiry type"
+                    className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white animate-in zoom-in-95 duration-300"
+                  />
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium dark:text-gray-300">Email Address</label>
@@ -305,7 +329,7 @@ const ContactPage = ({ handleFormSubmit, formData, handleInputChange, submitStat
 
 // --- PAGE COMPONENTS ---
 
-const HomePage = ({ navigateTo, handleServiceClick, setIsYoutubeOpen }: HomePageProps) => (
+const HomePage = ({ navigateTo, handleServiceClick, setIsYoutubeOpen, openLightbox }: HomePageProps) => (
   <div className="space-y-24 pb-24">
     <Hero navigateTo={navigateTo} />
 
@@ -337,7 +361,7 @@ const HomePage = ({ navigateTo, handleServiceClick, setIsYoutubeOpen }: HomePage
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {servicesData.slice(0, 3).map((s) => (
-          <ServiceCard key={s.id} service={s} handleServiceClick={handleServiceClick} />
+          <ServiceCard key={s.id} service={s} handleServiceClick={handleServiceClick} openLightbox={openLightbox} />
         ))}
       </div>
       <div className="text-center mt-12">
@@ -358,7 +382,7 @@ const HomePage = ({ navigateTo, handleServiceClick, setIsYoutubeOpen }: HomePage
           <div className="bg-gray-50 dark:bg-industrial-800 p-8 rounded-xl">
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Experience over Gold</h3>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-              Our gallery is not a photoshoot; it is a testament. Every image you see was captured by a technician on-site—a witness to the precision, sweat, and problem-solving that defines our true story. This is engineering in its rawest, most reliable form.
+              Our gallery is not a photoshoot; it is a testament. Every image you see was captured by a technician on-site, a witness to the precision, sweat, and problem-solving that defines our true story. This is engineering in its rawest, most reliable form.
             </p>
           </div>
 
@@ -377,6 +401,7 @@ const HomePage = ({ navigateTo, handleServiceClick, setIsYoutubeOpen }: HomePage
                     src={project.image}
                     alt={project.category}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    onClick={() => openLightbox(project.image)}
                   />
                 </div>
               ))}
@@ -398,9 +423,9 @@ const HomePage = ({ navigateTo, handleServiceClick, setIsYoutubeOpen }: HomePage
     <section className="bg-gray-100 dark:bg-industrial-800 py-20">
       {/* Engineering in Motion - YouTube Section */}
       <div className="bg-white dark:bg-industrial-900 rounded-2xl p-8 md:p-12 text-center max-w-4xl mx-auto">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <Youtube className="text-red-600" size={40} />
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-white">Engineering in Motion</h3>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-3 mb-6">
+          <Youtube className="text-red-600 mb-2 md:mb-0" size={48} />
+          <h3 className="text-3xl font-bold text-gray-900 dark:text-white leading-tight">Engineering in Motion</h3>
         </div>
         <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
           See our technicians in action. Watch the technical precision behind our major overhauls and field repairs.
@@ -458,10 +483,14 @@ const HomePage = ({ navigateTo, handleServiceClick, setIsYoutubeOpen }: HomePage
   </div>
 );
 
-const AboutPage = ({ navigateTo }: PageProps) => (
+const AboutPage = ({ navigateTo, openLightbox }: PageProps) => (
   <div className="pb-24 pt-20">
     <div className="h-96 relative bg-gray-900 flex items-center justify-center">
-      <img src="/landing3.jpg" className="absolute inset-0 w-full h-full object-cover opacity-30" />
+      <img
+        src="/landing3.jpg"
+        className="absolute inset-0 w-full h-full object-cover opacity-30 cursor-pointer"
+        onClick={() => openLightbox && openLightbox('/landing3.jpg')}
+      />
       <div className="relative z-10 text-center">
         <h1 className="text-5xl font-heading font-bold text-white mb-4">About Hannovers</h1>
         <p className="text-xl text-gray-300">Building the future since 2010</p>
@@ -486,21 +515,29 @@ const AboutPage = ({ navigateTo }: PageProps) => (
           </div>
         </Card>
         <div className="grid grid-cols-2 gap-4">
-          <img src="guide.jpg" className="rounded-xl shadow-lg w-full h-full object-cover" />
-          <img src="hero3.jpg" className="rounded-xl shadow-lg w-full h-full object-cover translate-y-8" />
+          <img
+            src="guide.jpg"
+            className="rounded-xl shadow-lg w-full h-full object-cover cursor-pointer"
+            onClick={() => openLightbox && openLightbox('guide.jpg')}
+          />
+          <img
+            src="hero3.jpg"
+            className="rounded-xl shadow-lg w-full h-full object-cover translate-y-8 cursor-pointer"
+            onClick={() => openLightbox && openLightbox('hero3.jpg')}
+          />
         </div>
       </div>
 
       {/* Timeline */}
       <div className="mb-24">
         <SectionHeader title="Our Journey" subtitle="Milestones" centered />
-        <div className="flex overflow-x-auto gap-8 pb-8 hide-scrollbar justify-center">
+        <div className="flex flex-col md:flex-row md:overflow-x-auto gap-8 pb-8 md:hide-scrollbar px-4 md:justify-center">
           {[
-            { year: '2010', title: 'Founded', desc: 'Establishing a proven track record with \nsome of the industry’s most respected names.' },
+            { year: '2010', title: 'Founded', desc: 'Establishing a proven track record with \nsome of the industry\u2019s most respected names.' },
             { year: 'Since 2010', title: 'Growth', desc: 'Building on our foundation of expert generator services, \nwe have expanded into a comprehensive provider of \ndiverse industrial solutions.' },
             { year: 'Future', title: 'We are Aiming,', desc: 'Aiming to provide engineering \nservices with emerging technologies \nfor all of your need.' }
           ].map((item, i) => (
-            <div key={i} className="min-w-[250px]">
+            <div key={i} className="md:min-w-[250px] justify-center w-full md:w-auto">
               <div className="text-5xl font-bold text-gray-200 dark:text-gray-800 mb-2">{item.year}</div>
               <div className="border-l-4 border-industrial-accent pl-4">
                 <h4 className="font-bold text-lg dark:text-white">{item.title}</h4>
@@ -515,7 +552,12 @@ const AboutPage = ({ navigateTo }: PageProps) => (
       <div className="mb-24">
         <SectionHeader title="Our Team" subtitle="Experts" centered />
         <div className="flex flex-col lg:flex-row items-stretch justify-center gap-8">
-          <img src="team.png" className="rounded-xl shadow-lg w-full lg:w-1/3 object-cover" alt="Engineering Team" />
+          <img
+            src="team.png"
+            className="rounded-xl shadow-lg w-full lg:w-1/3 object-cover cursor-pointer"
+            alt="Engineering Team"
+            onClick={() => openLightbox && openLightbox('team.png')}
+          />
           <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[450px] flex-1">
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
               Our maintenance and servicing teams are composed of highly skilled personnel with comprehensive expertise in mechanical, electrical, pneumatic, hydraulic, and automation systems. Our team provides an efficient and professional service to clients across the island, ensuring that your operations remain seamless and productive. We are the trusted experts who understand your machinery from the inside out, allowing us to diagnose complex issues with precision and speed.
@@ -529,7 +571,7 @@ const AboutPage = ({ navigateTo }: PageProps) => (
       <div className="flex flex-wrap justify-center gap-8">
 
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
-          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/generator.png" className="w-10 h-10" alt="generator" /></div>Power Generation & Energy Systems</h2>
+          <h2 className="text-xl font-bold text-industrial-900 dark:text-white mb-6 flex items-start gap-3"><div className="bg-white p-2 rounded-full shrink-0"><img src="/generator.png" className="w-8 h-8" alt="generator" /></div><span>Power Generation & Energy Systems</span></h2>
           <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
             We specialise in end-to-end services for Diesel Generators and Marine Generators, ensuring peak performance and 24/7 reliability across the nation. <br /> <br />
             We specialize in power generation and preventive maintenance, supplying generator controllers, alternators, and spare parts trusted by industries nationwide for their quality and dependability.
@@ -537,20 +579,19 @@ const AboutPage = ({ navigateTo }: PageProps) => (
           <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
         </Card>
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
-          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/marine(3).png" className="w-10 h-10" alt="generator" /></div>Marine & Maritime Engineering</h2>
+          <h2 className="text-xl font-bold text-industrial-900 dark:text-white mb-6 flex items-start gap-3"><div className="bg-white p-2 rounded-full shrink-0"><img src="/marine(3).png" className="w-8 h-8" alt="generator" /></div><span>Marine & Maritime Engineering</span></h2>
           <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
             Our expert technicians provide critical support for:
           </p>
-          <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mb-6 justify-center ml-6">
-            <li>Marine Engines: Services, heat exchangers, and spares for <span className="ml-5">off-shore ships.</span> </li>
-            <li>Industrial Machinery: Maintenance and repairs for industrial <span className="ml-5">power panels and related systems.</span></li>
-            <li>Construction Machinery: Comprehensive service, repairs, and <span className="ml-5">genuine spare parts.</span></li>
-
+          <ul className="list-disc list-outside pl-5 text-gray-600 dark:text-gray-300 mb-6 space-y-1">
+            <li>Marine Engines: Services, heat exchangers, and spares for off-shore ships.</li>
+            <li>Industrial Machinery: Maintenance and repairs for industrial power panels and related systems.</li>
+            <li>Construction Machinery: Comprehensive service, repairs, and genuine spare parts.</li>
           </ul>
           <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
         </Card>
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col  max-w-[600px] ">
-          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/specialised.png" className="w-10 h-10" alt="generator" /></div>Specialised Aviation & Fleet Support</h2>
+          <h2 className="text-xl font-bold text-industrial-900 dark:text-white mb-6 flex items-start gap-3"><div className="bg-white p-2 rounded-full shrink-0"><img src="/specialised.png" className="w-8 h-8" alt="generator" /></div><span>Specialised Aviation & Fleet Support</span></h2>
           <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
             We are equipped to handle a variety of specialised and commercial vehicles, including airport fire trucks, aircraft towing vehicles, and fire rescue vehicles.
             Our services cover everything from standard maintenance to complete overhauls.
@@ -558,40 +599,40 @@ const AboutPage = ({ navigateTo }: PageProps) => (
           <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto mt-14">See Our Experience</Button>
         </Card>
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col  max-w-[600px] ">
-          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/industrial.png" className="w-12 h-10" alt="generator" /></div>Heavy Diesel & Industrial Solutions</h2>
+          <h2 className="text-xl font-bold text-industrial-900 dark:text-white mb-6 flex items-start gap-3"><div className="bg-white p-2 rounded-full shrink-0"><img src="/industrial.png" className="w-8 h-8" alt="generator" /></div><span>Heavy Diesel & Industrial Solutions</span></h2>
           {/* <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
             We are a leading supplier of genuine and quality parts for a wide range of machinery and engines. Our inventory includes:
           </p> */}
-          <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mb-6 justify-center ml-6">
+          <ul className="list-disc list-outside pl-5 text-gray-600 dark:text-gray-300 mb-6 space-y-1">
             <li>Locomotive Engines: Full-scale service, repair, and overhauls.</li>
-            <li>Chassis Repairs: Crack reinforcements, re-aligning, and <span className="ml-5">modifications.</span> </li>
-            <li>Heavy Diesel Engine Repairs: Comprehensive service, repair, <span className="ml-5">and overhauls.</span></li>
-            <li>Health Reports: In-depth diagnostics and health reports for <span className="ml-5">generators and other machinery.</span></li>
+            <li>Chassis Repairs: Crack reinforcements, re-aligning, and modifications.</li>
+            <li>Heavy Diesel Engine Repairs: Comprehensive service, repair, and overhauls.</li>
+            <li>Health Reports: In-depth diagnostics and health reports for generators and other machinery.</li>
           </ul>
           <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
         </Card>
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
-          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/heavy2.png" className="w-10 h-10" alt="generator" /></div>Industrial Machinery Solutions</h2>
+          <h2 className="text-xl font-bold text-industrial-900 dark:text-white mb-6 flex items-start gap-3"><div className="bg-white p-2 rounded-full shrink-0"><img src="/heavy2.png" className="w-8 h-8" alt="generator" /></div><span>Industrial Machinery Solutions</span></h2>
           <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
             We deliver reliable lifecycle support for industrial and agricultural machinery, built to perform on any terrain. From construction fleets to diesel tractors, our solutions ensure long-lasting, seamless operation in even the harshest conditions.
           </p>
-          <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mb-6 justify-center ml-6">
-            <li>Industrial Plant Servicing & Unit Repairs</li>
-            <li>Industrial Diesel Engine & Machinery</li>
-            <li>Diesel Forklift Maintenance & Support</li>
-            <li>Construction & Earthmoving Machinery</li>
+          <ul className="list-disc list-outside pl-5 text-gray-600 dark:text-gray-300 mb-6 space-y-1">
+            <li>Industrial Plant Servicing &amp; Unit Repairs</li>
+            <li>Industrial Diesel Engine &amp; Machinery</li>
+            <li>Diesel Forklift Maintenance &amp; Support</li>
+            <li>Construction &amp; Earthmoving Machinery</li>
           </ul>
           <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
         </Card>
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
-          <h2 className="text-3xl font-bold text-industrial-900 dark:text-white mb-6 flex items-center gap-2"><div className="bg-white p-2 rounded-full"><img src="/spare.png" className="w-10 h-10" alt="generator" /></div> Sales and Spares</h2>
+          <h2 className="text-xl font-bold text-industrial-900 dark:text-white mb-6 flex items-start gap-3"><div className="bg-white p-2 rounded-full shrink-0"><img src="/spare.png" className="w-8 h-8" alt="generator" /></div><span>Sales and Spares</span></h2>
           <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 ">
-           Precision components for mission-critical performance. We supply high-grade parts specifically engineered for the power and industrial sectors, ensuring that your systems are always supported by genuine, high-performance hardware. 
+            Precision components for mission-critical performance. We supply high-grade parts specifically engineered for the power and industrial sectors, ensuring that your systems are always supported by genuine, high-performance hardware.
           </p>
-          <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mb-6 justify-center ml-6">
+          <ul className="list-disc list-outside pl-5 text-gray-600 dark:text-gray-300 mb-6 space-y-1">
             <li>Diesel Generator Control Modules</li>
-            <li>Generator & Industrial Electrical parts</li>
-            <li>Industrial Electrical & Synchronization Parts</li>
+            <li>Generator &amp; Industrial Electrical parts</li>
+            <li>Industrial Electrical &amp; Synchronization Parts</li>
             <li>High Performance Turbochargers</li>
           </ul>
           <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
@@ -601,7 +642,7 @@ const AboutPage = ({ navigateTo }: PageProps) => (
   </div>
 );
 
-const ServicesPage = ({ navigateTo, handleServiceClick, setIsYoutubeOpen }: HomePageProps) => (
+const ServicesPage = ({ navigateTo, handleServiceClick, setIsYoutubeOpen, openLightbox }: HomePageProps) => (
   <div className="pb-24 pt-28">
     <div className="container mx-auto px-6">
       <SectionHeader title="Engineering Services" subtitle="What We Do" centered />
@@ -627,7 +668,7 @@ const ServicesPage = ({ navigateTo, handleServiceClick, setIsYoutubeOpen }: Home
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {servicesData.map((s) => (
-          <ServiceCard key={s.id} service={s} handleServiceClick={handleServiceClick} />
+          <ServiceCard key={s.id} service={s} handleServiceClick={handleServiceClick} openLightbox={openLightbox} />
         ))}
       </div>
 
@@ -673,6 +714,38 @@ const YoutubeModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
         ></iframe>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+const Lightbox = ({ image, onClose }: { image: string, onClose: () => void }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+      className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
+    >
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative max-w-[95vw] lg:max-w-[50vw] max-h-[85vh] lg:max-h-[50vh] flex items-center justify-center"
+      >
+        <button
+          onClick={onClose}
+          className="absolute -top-12 lg:-top-20 right-0 lg:right-10 text-white hover:text-industrial-accent transition-colors p-2"
+        >
+          <X size={36} />
+        </button>
+        <img
+          src={image}
+          className="w-full h-full object-contain rounded-lg shadow-2xl"
+          alt="Full screen"
+        />
       </motion.div>
     </motion.div>
   );
@@ -749,7 +822,7 @@ const ServiceModal = ({ service, onClose, navigateTo }: ServiceModalProps) => {
   );
 };
 
-const ProjectsPage = ({ navigateTo }: PageProps) => {
+const ProjectsPage = ({ navigateTo, openLightbox }: ProjectsPageProps) => {
   const [filter, setFilter] = useState('All');
   const [visibleCount, setVisibleCount] = useState(20);
 
@@ -786,7 +859,11 @@ const ProjectsPage = ({ navigateTo }: PageProps) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {displayedProjects.map((p) => (
-            <div key={p.id} className="group relative rounded-xl overflow-hidden cursor-pointer aspect-[3/2]">
+            <div
+              key={p.id}
+              className="group relative rounded-xl overflow-hidden cursor-pointer aspect-[3/2]"
+              onClick={() => openLightbox(p.image)}
+            >
               <img src={p.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
               <div className="absolute inset-0 bg-gradient-to-t from-industrial-900 via-transparent to-transparent opacity-80"></div>
               <div className="absolute bottom-0 left-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform">
@@ -836,6 +913,7 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const [isChatOpen, setIsChatOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   // EmailJS Form State
   const [formData, setFormData] = useState({
@@ -843,6 +921,7 @@ export default function App() {
     designation: '',
     company: '',
     inquiryType: '',
+    customInquiry: '',
     email: '',
     message: ''
   });
@@ -917,7 +996,7 @@ export default function App() {
         from_email: formData.email,
         designation: formData.designation,
         company_name: formData.company,
-        inquiry_type: formData.inquiryType,
+        inquiry_type: formData.inquiryType === 'Other(please specify)' ? formData.customInquiry : formData.inquiryType,
         message: formData.message,
         to_name: 'Hannovers Engineering',
       };
@@ -936,6 +1015,7 @@ export default function App() {
           designation: '',
           company: '',
           inquiryType: '',
+          customInquiry: '',
           email: '',
           message: ''
         });
@@ -975,9 +1055,9 @@ export default function App() {
             {/* <div className="bg-industrial-highlight p-2 rounded-lg">
               <Settings className="text-white animate-spin-slow" size={24} />
             </div> */}
-            <img src="logo2.png" alt="logo" width={400} height={400} className='rounded-xl  p-4 w-40 lg:w-[300px] h-auto' />
+            <img src="logo2.png" alt="logo" width={400} height={400} className='rounded-xl  p-4 w-72 lg:w-[300px] h-auto' />
             <div className='hidden lg:block text-xl font-bold text-corporate-primary pl-4'>HANNOVERS ENGINEERING PRIVATE LIMITED <br />
-              <span className='text text-industrial-700' style={{ fontFamily: "'Dancing Script', cursive" }}>Synchronizing to your Pulse</span>
+              <span className='text text-industrial-700' style={{ fontFamily: "'HarlowSolidItalic', sans-serif" }}>Synchronizing to your Pulse</span>
             </div>
           </div>
 
@@ -1059,10 +1139,10 @@ export default function App() {
 
       {/* Main Content Render */}
       <main className="min-h-screen">
-        {currentPage === Page.HOME && <HomePage navigateTo={navigateTo} handleServiceClick={handleServiceClick} setIsYoutubeOpen={setIsYoutubeOpen} />}
-        {currentPage === Page.ABOUT && <AboutPage navigateTo={navigateTo} />}
-        {currentPage === Page.SERVICES && <ServicesPage navigateTo={navigateTo} handleServiceClick={handleServiceClick} setIsYoutubeOpen={setIsYoutubeOpen} />}
-        {currentPage === Page.GALLERY && <ProjectsPage navigateTo={navigateTo} />}
+        {currentPage === Page.HOME && <HomePage navigateTo={navigateTo} handleServiceClick={handleServiceClick} setIsYoutubeOpen={setIsYoutubeOpen} openLightbox={setSelectedImage} />}
+        {currentPage === Page.ABOUT && <AboutPage navigateTo={navigateTo} openLightbox={setSelectedImage} />}
+        {currentPage === Page.SERVICES && <ServicesPage navigateTo={navigateTo} handleServiceClick={handleServiceClick} setIsYoutubeOpen={setIsYoutubeOpen} openLightbox={setSelectedImage} />}
+        {currentPage === Page.GALLERY && <ProjectsPage navigateTo={navigateTo} openLightbox={setSelectedImage} />}
         {currentPage === Page.CONTACT && (
           <ContactPage
             handleFormSubmit={handleFormSubmit}
@@ -1088,6 +1168,12 @@ export default function App() {
             onClose={() => setIsYoutubeOpen(false)}
           />
         )}
+        {selectedImage && (
+          <Lightbox
+            image={selectedImage}
+            onClose={() => setSelectedImage(null)}
+          />
+        )}
       </AnimatePresence>
 
       {/* Footer */}
@@ -1098,10 +1184,10 @@ export default function App() {
               <img src="logo2.png" alt="logo" className=' bg-white p-2 rounded-xl w-60' />
             </div>
             <p className="mb-6">
-              Our mission is to keep your machinery,fleets and plants in constant motion.Through expert, up-to-date maintenance, We minimize downtime and ensure your operations run smoothly, 24/7.
+              Our mission is to keep your machinery, fleets and plants in constant motion. Through expert, up-to-date maintenance, We minimize downtime and ensure your operations run smoothly, 24/7.
             </p>
             <div className="flex gap-4">
-              <a href="" target="_blank"><Linkedin className="hover:text-white cursor-pointer" /></a>
+              <a href="https://www.linkedin.com/company/hannovers-engineering/?viewAsMember=true" target="_blank"><Linkedin className="hover:text-white cursor-pointer" /></a>
               <a href="https://www.facebook.com/hannoversengineering/" target="_blank"><Facebook className="hover:text-white cursor-pointer" /></a>
               <a href="https://www.youtube.com/@hannoversengineering5223" target="_blank"><Youtube className="hover:text-white cursor-pointer" width={28} height={28} /></a>
             </div>

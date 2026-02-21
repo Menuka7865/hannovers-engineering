@@ -1,0 +1,7 @@
+@font-face {
+  font-family: 'HarlowSolidItalic';
+  src: url('/fonts/HarlowSolidItalic.woff2') format('woff2'),
+       url('/fonts/HarlowSolidItalic.woff') format('woff');
+  font-style: italic;
+  font-weight: normal;
+}
