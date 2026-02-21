@@ -168,162 +168,220 @@ const Counter = ({ value, duration = 2, shouldAnimate = true }: CounterProps) =>
 
 // --- SUB-COMPONENTS (Pages) ---
 
-const ContactPage = ({ handleFormSubmit, formData, handleInputChange, submitStatus, isSending }: ContactPageProps) => (
-  <div className="pt-24 pb-24">
-    <div className="container mx-auto px-6">
-      <SectionHeader title="Contact Us" subtitle="Get in Touch" centered />
+const ContactPage = ({ handleFormSubmit, formData, handleInputChange, submitStatus, isSending }) => {
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <div className="space-y-8">
-          <div className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-lg border-l-4 border-industrial-highlight">
-            <h3 className="text-lg md:text-2xl font-bold dark:text-white mb-4 flex items-center gap-3 ml-2">
-              Contact Number
-            </h3>
-            <a href="tel:+94773829924" className="text-xl md:text-3xl font-semibold text-industrial-900 flex dark:text-white hover:text-industrial-accent"><Phone className="text-industrial-highlight mt-2 mx-2" />+94 77 382 9924</a>
+  return (
+    <div className="pt-24 pb-24">
+      <div className="container mx-auto px-6">
+        <SectionHeader title="Contact Us" subtitle="Get in Touch" centered />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Left Side – Contact Details */}
+          <div className="space-y-8">
+            <div className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-lg border-l-4 border-industrial-highlight">
+              <h3 className="text-lg md:text-2xl font-bold dark:text-white mb-4 flex items-center gap-3 ml-2">
+                Contact Number
+              </h3>
+              <a
+                href="tel:+94773829924"
+                className="text-xl md:text-3xl font-semibold text-industrial-900 flex dark:text-white hover:text-industrial-accent"
+              >
+                <Phone className="text-industrial-highlight mt-2 mx-2" />
+                +94 77 382 9924
+              </a>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-xl">
+                <MapPin className="text-blue-500 mb-4" size={32} />
+                <h4 className="font-bold dark:text-white">Headquarters</h4>
+                <p className="text-gray-500 text-sm mt-2">
+                  102/159, Madara Gardens, Mattegoda, 10240. Sri Lanka
+                </p>
+              </div>
+              <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-xl flex items-center justify-center">
+                <a href="mailto:hellohnvrs@gmail.com">
+                  <Button size="lg">Email Us</Button>
+                </a>
+              </div>
+            </div>
+
+            {/* Interactive Map with Fullscreen Toggle */}
+            <div
+              className={`${isFullScreen ? 'fixed inset-0 z-50' : 'h-64'
+                } bg-gray-200 rounded-xl overflow-hidden relative`}
+            >
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3320.624113429111!2d79.9650603283118!3d6.81812687014675!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae251d6657dd76b%3A0x187744c7f359ed69!2sHannovers%20Engineering%20Sri%20Lanka!5e0!3m2!1sen!2slk!4v1768752490817!5m2!1sen!2slk"
+                width="100%"
+                height={isFullScreen ? '100%' : '350'}
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Hannovers Engineering Sri Lanka"
+              ></iframe>
+
+              {/* Fullscreen toggle button */}
+              {/* <button
+                onClick={() => setIsFullScreen(!isFullScreen)}
+                className={`absolute ${
+                  isFullScreen ? 'top-4 right-4' : 'bottom-4 right-4'
+                } bg-blue-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-700 transition`}
+              >
+                {isFullScreen ? 'Exit Fullscreen' : 'View Fullscreen'}
+              </button> */}
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-xl">
-              <MapPin className="text-blue-500 mb-4" size={32} />
-              <h4 className="font-bold dark:text-white">Headquarters</h4>
-              <p className="text-gray-500 text-sm mt-2">102/159, Madara Gardens, Mattegoda, 10240. Sri Lanka</p>
-            </div>
-            <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-xl">
-              <a href="mailto:hellohnvrs@gmail.com"><Button size="lg" className='mx-auto my-8'>Email Us</Button></a>
-            </div>
-          </div>
-
-          {/* Mock Map */}
-          <div className="h-64 bg-gray-200 rounded-xl overflow-hidden relative">
-            <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-            </div>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3320.624113429111!2d79.9650603283118!3d6.81812687014675!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae251d6657dd76b%3A0x187744c7f359ed69!2sHannovers%20Engineering%20Sri%20Lanka!5e0!3m2!1sen!2slk!4v1768752490817!5m2!1sen!2slk" width="800" height="350" style={{ border: 0 }} allowFullScreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-industrial-900 p-8 rounded-2xl shadow-2xl">
-          <h3 className="text-2xl font-bold dark:text-white mb-6">Send Message</h3>
-          <form onSubmit={handleFormSubmit} className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium dark:text-gray-300">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium dark:text-gray-300">Designation</label>
-                <input
-                  type="text"
-                  name="designation"
-                  value={formData.designation}
-                  onChange={handleInputChange}
-                  className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium dark:text-gray-300">Company Name</label>
-                <input
-                  type="text"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleInputChange}
-                  className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium dark:text-gray-300">Type of Inquiry</label>
-                <select
-                  name="inquiryType"
-                  required
-                  value={formData.inquiryType}
-                  onChange={handleInputChange}
-                  className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white appearance-none"
-                >
-                  <option value="" disabled>Select Inquiry Type</option>
-                  <option value="Power Generation & Energy Systems">Power Generation & Energy Systems</option>
-                  <option value="Marine & Maritime Engineering">Marine & Maritime Engineering</option>
-                  <option value="Specialised Aviation & Fleet Support">Specialised Aviation & Fleet Support</option>
-                  <option value="Heavy Diesel & Industrial Solutions">Heavy Diesel & Industrial Solutions</option>
-                  <option value="Industrial, Plant, & Agriculture Machinery Solutions">Industrial, Plant, & Agriculture Machinery Solutions</option>
-                  <option value="Sales & Component Supply">Sales & Component Supply</option>
-                  <option value="Other(please specify)">Other(please specify)</option>
-                </select>
-              </div>
-              {formData.inquiryType === 'Other(please specify)' && (
-                <div className="space-y-2 col-span-2">
-                  <label className="text-sm font-medium dark:text-gray-300 animate-in fade-in slide-in-from-top-1 duration-300">Please specify your inquiry</label>
+          {/* Right Side – Contact Form */}
+          <div className="bg-white dark:bg-industrial-900 p-8 rounded-2xl shadow-2xl">
+            <h3 className="text-2xl font-bold dark:text-white mb-6">Send Message</h3>
+            <form onSubmit={handleFormSubmit} className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium dark:text-gray-300">Name</label>
                   <input
                     type="text"
-                    name="customInquiry"
+                    name="name"
                     required
-                    value={formData.customInquiry}
+                    value={formData.name}
                     onChange={handleInputChange}
-                    placeholder="Enter your inquiry type"
-                    className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white animate-in zoom-in-95 duration-300"
+                    className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
                   />
                 </div>
-              )}
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium dark:text-gray-300">Email Address</label>
-              <input
-                type="email"
-                name="email"
-                required
-                value={formData.email}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium dark:text-gray-300">Message</label>
-              <textarea
-                name="message"
-                required
-                rows={5}
-                value={formData.message}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
-              ></textarea>
-            </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium dark:text-gray-300">Designation</label>
+                  <input
+                    type="text"
+                    name="designation"
+                    value={formData.designation}
+                    onChange={handleInputChange}
+                    className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium dark:text-gray-300">Company Name</label>
+                  <input
+                    type="text"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleInputChange}
+                    className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium dark:text-gray-300">Type of Inquiry</label>
+                  <select
+                    name="inquiryType"
+                    required
+                    value={formData.inquiryType}
+                    onChange={handleInputChange}
+                    className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white appearance-none"
+                  >
+                    <option value="" disabled>
+                      Select Inquiry Type
+                    </option>
+                    <option value="Power Generation & Energy Systems">
+                      Power Generation & Energy Systems
+                    </option>
+                    <option value="Marine & Maritime Engineering">
+                      Marine & Maritime Engineering
+                    </option>
+                    <option value="Specialised Aviation & Fleet Support">
+                      Specialised Aviation & Fleet Support
+                    </option>
+                    <option value="Heavy Diesel & Industrial Solutions">
+                      Heavy Diesel & Industrial Solutions
+                    </option>
+                    <option value="Industrial, Plant, & Agriculture Machinery Solutions">
+                      Industrial, Plant, & Agriculture Machinery Solutions
+                    </option>
+                    <option value="Sales & Component Supply">Sales & Component Supply</option>
+                    <option value="Other(please specify)">Other (please specify)</option>
+                  </select>
+                </div>
 
-            {submitStatus === 'success' && (
-              <div className="p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg flex items-center gap-2">
-                <CheckCircle size={20} />
-                <span>Message sent successfully! We will get back to you soon.</span>
+                {formData.inquiryType === 'Other(please specify)' && (
+                  <div className="space-y-2 col-span-2">
+                    <label className="text-sm font-medium dark:text-gray-300 animate-in fade-in slide-in-from-top-1 duration-300">
+                      Please specify your inquiry
+                    </label>
+                    <input
+                      type="text"
+                      name="customInquiry"
+                      required
+                      value={formData.customInquiry}
+                      onChange={handleInputChange}
+                      placeholder="Enter your inquiry type"
+                      className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white animate-in zoom-in-95 duration-300"
+                    />
+                  </div>
+                )}
               </div>
-            )}
 
-            {submitStatus === 'error' && (
-              <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg flex items-center gap-2">
-                <X size={20} />
-                <span>Failed to send message. Please try again or contact us via phone.</span>
+              <div className="space-y-2">
+                <label className="text-sm font-medium dark:text-gray-300">Email Address</label>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+                />
               </div>
-            )}
 
-            <Button
-              type="submit"
-              className="w-full h-12 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={isSending}
-            >
-              {isSending ? (
-                <>Sending... <Loader2 size={18} className="animate-spin" /></>
-              ) : (
-                <>Send Message <Send size={18} /></>
+              <div className="space-y-2">
+                <label className="text-sm font-medium dark:text-gray-300">Message</label>
+                <textarea
+                  name="message"
+                  required
+                  rows={5}
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  className="w-full p-3 rounded-lg bg-gray-50 dark:bg-slate-800 border dark:border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+                ></textarea>
+              </div>
+
+              {/* Success / Error Alerts */}
+              {submitStatus === 'success' && (
+                <div className="p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg flex items-center gap-2">
+                  <CheckCircle size={20} />
+                  <span>Message sent successfully! We will get back to you soon.</span>
+                </div>
               )}
-            </Button>
-          </form>
+
+              {submitStatus === 'error' && (
+                <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg flex items-center gap-2">
+                  <X size={20} />
+                  <span>Failed to send message. Please try again or contact us via phone.</span>
+                </div>
+              )}
+
+              <Button
+                type="submit"
+                className="w-full h-12 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isSending}
+              >
+                {isSending ? (
+                  <>
+                    Sending... <Loader2 size={18} className="animate-spin" />
+                  </>
+                ) : (
+                  <>
+                    Send Message <Send size={18} />
+                  </>
+                )}
+              </Button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 // --- MAIN LAYOUT & ROUTING ---
 
@@ -492,7 +550,7 @@ const AboutPage = ({ navigateTo, openLightbox }: PageProps) => (
         onClick={() => openLightbox && openLightbox('/landing3.jpg')}
       />
       <div className="relative z-10 text-center">
-        <h1 className="text-5xl font-heading font-bold text-white mb-4">About Hannovers</h1>
+        <h1 className="text-3xl md:text-5xl font-heading font-bold text-white mb-4">About Hannovers</h1>
         <p className="text-xl text-gray-300">Building the future since 2010</p>
       </div>
     </div>
@@ -584,7 +642,7 @@ const AboutPage = ({ navigateTo, openLightbox }: PageProps) => (
             Our expert technicians provide critical support for:
           </p>
           <ul className="list-disc list-outside pl-5 text-gray-600 dark:text-gray-300 mb-6 space-y-1">
-            <li>Marine Engines: Services, heat exchangers, and spares for off-shore ships.</li>
+            <li>Marine Engines: Services, Overhauls, heat exchangers, and spares for off-shore ships.</li>
             <li>Industrial Machinery: Maintenance and repairs for industrial power panels and related systems.</li>
             <li>Construction Machinery: Comprehensive service, repairs, and genuine spare parts.</li>
           </ul>
@@ -843,7 +901,7 @@ const ProjectsPage = ({ navigateTo, openLightbox }: ProjectsPageProps) => {
           story. This is engineering in its rawest, most reliable form.</p>
 
         <div className="flex justify-center gap-2 mb-12 flex-wrap">
-          {['All', 'Power Generators', 'Marine Services', 'Specialised Aviation & Fleet Support', 'Heavy Vehicles', 'Industrial Machineries', 'Sales & Components'].map((f) => (
+          {['All', 'Power Generators', 'Marine Services', 'Specialised Aviation & Fleet Support', 'Heavy Vehicles', 'Industrial,Plant,Construction,Forklift & Agriculture', 'Sales & Components'].map((f) => (
             <button
               key={f}
               onClick={() => handleFilterChange(f)}
@@ -1113,8 +1171,7 @@ export default function App() {
               { label: 'Home', page: Page.HOME },
               { label: 'About', page: Page.ABOUT },
               { label: 'Services', page: Page.SERVICES },
-              { label: 'Gallery', page: Page.GALLERY },
-              { label: 'Client Support', page: Page.HOME, isSupport: true },
+              { label: 'Gallery', page: Page.GALLERY, isSupport: false },
               { label: 'Contact', page: Page.CONTACT },
             ].map((item) => (
               <button
@@ -1213,6 +1270,7 @@ export default function App() {
               {[
                 { label: 'Home', page: Page.HOME },
                 { label: 'About', page: Page.ABOUT },
+                { label: 'Services', page: Page.SERVICES },
                 { label: 'Gallery', page: Page.GALLERY },
                 { label: 'Contact', page: Page.CONTACT },
               ].map((link) => (

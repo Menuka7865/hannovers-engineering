@@ -23,7 +23,7 @@ export interface Service {
 export interface Project {
   id: string;
   title: string;
-  category: 'Power Generators' | 'Marine Services' | 'Specialised Aviation & Fleet Support' | 'Heavy Vehicles'|'Industrial Machineries'|'Sales & Components';
+  category: 'Power Generators' | 'Marine Services' | 'Specialised Aviation & Fleet Support' | 'Heavy Vehicles'|'Industrial,Plant,Construction,Forklift & Agriculture'|'Sales & Components';
   image: string;
   client: string;
   result: string;
