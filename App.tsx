@@ -26,7 +26,7 @@ import { Button, Card, SectionHeader } from './components/Components';
 
 // --- TYPES ---
 interface HeroProps {
-  navigateTo: (page: Page) => void;
+  navigateTo: (page: Page, filter?: string) => void;
 }
 
 interface ServiceCardProps {
@@ -43,7 +43,7 @@ interface CounterProps {
 }
 
 interface PageProps {
-  navigateTo: (page: Page) => void;
+  navigateTo: (page: Page, filter?: string) => void;
   openLightbox?: (image: string) => void;
 }
 
@@ -55,6 +55,7 @@ interface HomePageProps extends PageProps {
 
 interface ProjectsPageProps extends PageProps {
   openLightbox: (image: string) => void;
+  galleryFilter: string | null;
 }
 
 interface ContactPageProps {
@@ -76,7 +77,7 @@ interface ContactPageProps {
 interface ServiceModalProps {
   service: Service;
   onClose: () => void;
-  navigateTo: (page: Page) => void;
+  navigateTo: (page: Page, filter?: string) => void;
 }
 
 // --- SUB-COMPONENTS (Pages) ---
@@ -453,16 +454,19 @@ const HomePage = ({ navigateTo, handleServiceClick, setIsYoutubeOpen, openLightb
           </div>
           <div className="md:col-span-2 flex flex-col items-center mt-12">
             <div className="flex justify-center gap-6 mb-12 flex-wrap">
-              {galleryData.slice(0, 6).map((project) => (
-                <div key={project.id} className="relative w-full max-w-[300px] aspect-[3/2] rounded-xl overflow-hidden shadow-xl group">
-                  <img
-                    src={project.image}
-                    alt={project.category}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    onClick={() => openLightbox(project.image)}
-                  />
-                </div>
-              ))}
+              {galleryData
+                .filter(p => p.category === 'Generator Preventive Services')
+                .slice(0, 6)
+                .map((project) => (
+                  <div key={project.id} className="relative w-full max-w-[300px] aspect-[3/2] rounded-xl overflow-hidden shadow-xl group">
+                    <img
+                      src={project.image}
+                      alt={project.category}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      onClick={() => openLightbox(project.image)}
+                    />
+                  </div>
+                ))}
             </div>
             <Button
               variant="outline"
@@ -625,7 +629,7 @@ const AboutPage = ({ navigateTo, openLightbox }: PageProps) => (
       </div>
     </div>
     <div>
-      <SectionHeader title="Our Services" subtitle="From Us" centered />
+      <SectionHeader title="Our Engineering Services" subtitle="Core Expertise" centered />
       <div className="flex flex-wrap justify-center gap-8">
 
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
@@ -634,7 +638,7 @@ const AboutPage = ({ navigateTo, openLightbox }: PageProps) => (
             We specialise in end-to-end services for Diesel Generators and Marine Generators, ensuring peak performance and 24/7 reliability across the nation. <br /> <br />
             We specialize in power generation and preventive maintenance, supplying generator controllers, alternators, and spare parts trusted by industries nationwide for their quality and dependability.
           </p>
-          <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
+          <Button onClick={() => navigateTo(Page.GALLERY, 'Power Generators')} className="px-2 w-fit mx-auto">See Our Experience</Button>
         </Card>
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
           <h2 className="text-xl font-bold text-industrial-900 dark:text-white mb-6 flex items-start gap-3"><div className="bg-white p-2 rounded-full shrink-0"><img src="/marine(3).png" className="w-8 h-8" alt="generator" /></div><span>Marine & Maritime Engineering</span></h2>
@@ -646,7 +650,7 @@ const AboutPage = ({ navigateTo, openLightbox }: PageProps) => (
             <li>Industrial Machinery: Maintenance and repairs for industrial power panels and related systems.</li>
             <li>Construction Machinery: Comprehensive service, repairs, and genuine spare parts.</li>
           </ul>
-          <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
+          <Button onClick={() => navigateTo(Page.GALLERY, 'Marine Services')} className="px-2 w-fit mx-auto">See Our Experience</Button>
         </Card>
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col  max-w-[600px] ">
           <h2 className="text-xl font-bold text-industrial-900 dark:text-white mb-6 flex items-start gap-3"><div className="bg-white p-2 rounded-full shrink-0"><img src="/specialised.png" className="w-8 h-8" alt="generator" /></div><span>Specialised Aviation & Fleet Support</span></h2>
@@ -654,7 +658,7 @@ const AboutPage = ({ navigateTo, openLightbox }: PageProps) => (
             We are equipped to handle a variety of specialised and commercial vehicles, including airport fire trucks, aircraft towing vehicles, and fire rescue vehicles.
             Our services cover everything from standard maintenance to complete overhauls.
           </p>
-          <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto mt-14">See Our Experience</Button>
+          <Button onClick={() => navigateTo(Page.GALLERY, 'Specialised Aviation & Fleet Support')} className="px-2 w-fit mx-auto mt-14">See Our Experience</Button>
         </Card>
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col  max-w-[600px] ">
           <h2 className="text-xl font-bold text-industrial-900 dark:text-white mb-6 flex items-start gap-3"><div className="bg-white p-2 rounded-full shrink-0"><img src="/industrial.png" className="w-8 h-8" alt="generator" /></div><span>Heavy Diesel & Industrial Solutions</span></h2>
@@ -667,7 +671,7 @@ const AboutPage = ({ navigateTo, openLightbox }: PageProps) => (
             <li>Heavy Diesel Engine Repairs: Comprehensive service, repair, and overhauls.</li>
             <li>Health Reports: In-depth diagnostics and health reports for generators and other machinery.</li>
           </ul>
-          <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
+          <Button onClick={() => navigateTo(Page.GALLERY, 'Heavy Vehicles')} className="px-2 w-fit mx-auto">See Our Experience</Button>
         </Card>
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
           <h2 className="text-xl font-bold text-industrial-900 dark:text-white mb-6 flex items-start gap-3"><div className="bg-white p-2 rounded-full shrink-0"><img src="/heavy2.png" className="w-8 h-8" alt="generator" /></div><span>Industrial Machinery Solutions</span></h2>
@@ -680,7 +684,7 @@ const AboutPage = ({ navigateTo, openLightbox }: PageProps) => (
             <li>Diesel Forklift Maintenance &amp; Support</li>
             <li>Construction &amp; Earthmoving Machinery</li>
           </ul>
-          <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
+          <Button onClick={() => navigateTo(Page.GALLERY, 'Industrial,Plant,Construction,Forklift & Agriculture')} className="px-2 w-fit mx-auto">See Our Experience</Button>
         </Card>
         <Card className="bg-white dark:bg-industrial-800 p-10 shadow-2xl flex flex-col justify-center max-w-[600px] ">
           <h2 className="text-xl font-bold text-industrial-900 dark:text-white mb-6 flex items-start gap-3"><div className="bg-white p-2 rounded-full shrink-0"><img src="/spare.png" className="w-8 h-8" alt="generator" /></div><span>Sales and Spares</span></h2>
@@ -693,7 +697,7 @@ const AboutPage = ({ navigateTo, openLightbox }: PageProps) => (
             <li>Industrial Electrical &amp; Synchronization Parts</li>
             <li>High Performance Turbochargers</li>
           </ul>
-          <Button onClick={() => navigateTo(Page.GALLERY)} className="px-2 w-fit mx-auto">See Our Experience</Button>
+          <Button onClick={() => navigateTo(Page.GALLERY, 'Sales & Components')} className="px-2 w-fit mx-auto">See Our Experience</Button>
         </Card>
       </div>
     </div>
@@ -907,13 +911,24 @@ const INDUSTRIAL_SUBS = [
 
 ];
 
-const ProjectsPage = ({ navigateTo, openLightbox }: ProjectsPageProps) => {
-  const [filter, setFilter] = useState('All');
+const ProjectsPage = ({ navigateTo, openLightbox, galleryFilter }: ProjectsPageProps) => {
+  const [filter, setFilter] = useState(galleryFilter || 'All');
   const [powerSubFilter, setPowerSubFilter] = useState<string | null>(null);
   const [aviationSubFilter, setAviationSubFilter] = useState<string | null>(null);
   const [heavySubFilter, setHeavySubFilter] = useState<string | null>(null);
   const [industrialSubFilter, setIndustrialSubFilter] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(20);
+
+  useEffect(() => {
+    if (galleryFilter) {
+      setFilter(galleryFilter);
+      setPowerSubFilter(null);
+      setAviationSubFilter(null);
+      setHeavySubFilter(null);
+      setIndustrialSubFilter(null);
+      setVisibleCount(20);
+    }
+  }, [galleryFilter]);
 
   // Map each main category to itself + all its sub-categories
   const CATEGORY_GROUP: Record<string, string[]> = {
@@ -1109,6 +1124,7 @@ export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [isYoutubeOpen, setIsYoutubeOpen] = useState(false);
+  const [galleryFilter, setGalleryFilter] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const [isChatOpen, setIsChatOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -1168,10 +1184,11 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const navigateTo = (page: Page) => {
+  const navigateTo = (page: Page, filter?: string) => {
     const path = page === Page.HOME ? '/' : `/${page.toLowerCase()}`;
     window.history.pushState({ page }, '', path);
     setCurrentPage(page);
+    setGalleryFilter(filter || null);
     setSelectedService(null);
   };
 
@@ -1340,7 +1357,7 @@ export default function App() {
         {currentPage === Page.HOME && <HomePage navigateTo={navigateTo} handleServiceClick={handleServiceClick} setIsYoutubeOpen={setIsYoutubeOpen} openLightbox={setSelectedImage} />}
         {currentPage === Page.ABOUT && <AboutPage navigateTo={navigateTo} openLightbox={setSelectedImage} />}
         {currentPage === Page.SERVICES && <ServicesPage navigateTo={navigateTo} handleServiceClick={handleServiceClick} setIsYoutubeOpen={setIsYoutubeOpen} openLightbox={setSelectedImage} />}
-        {currentPage === Page.GALLERY && <ProjectsPage navigateTo={navigateTo} openLightbox={setSelectedImage} />}
+        {currentPage === Page.GALLERY && <ProjectsPage navigateTo={navigateTo} openLightbox={setSelectedImage} galleryFilter={galleryFilter} />}
         {currentPage === Page.CONTACT && (
           <ContactPage
             handleFormSubmit={handleFormSubmit}
