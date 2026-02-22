@@ -1429,6 +1429,7 @@ export default function App() {
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3 text-sm"><MapPin size={18} className="mt-1 shrink-0" /> 102/159, Madara Gardens, Mattegoda, 10240. Sri Lanka</li>
                   <li className="flex items-center gap-3 text-sm"><Phone size={18} /> +94 77 382 9924</li>
+                  <li className="flex items-center gap-3 text-sm"><Mail size={18} /> hellohnvrs@gmail.com</li>
                 </ul>
               </div>
               {/* <div>
