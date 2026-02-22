@@ -880,15 +880,88 @@ const ServiceModal = ({ service, onClose, navigateTo }: ServiceModalProps) => {
   );
 };
 
+const POWER_GENERATOR_SUBS = [
+  'Alternator Rewinds & Installation Upgrades',
+  'Complete Generator Overhauls',
+  'Generator Preventive Services',
+  'Radiators and Cooling Systems',
+];
+
+const AVIATION_SUBS = [
+  'Chassis Repairs',
+  'Specialised Aviation Fleet Support',
+  'Truck Dent Repairs and Painting',
+];
+
+const HEAVY_VEHICLES_SUBS = [
+  'Diagnostics',
+  'Heavy Diesel Engine Repair Overhauls',
+  'Locomotive Repairs',
+  'Unit Repairs',
+];
+
+const INDUSTRIAL_SUBS = [
+  'Agricultural Machineries',
+  'Industrial Machineries',
+  'Costruction machinery & Container Handling',
+
+];
+
 const ProjectsPage = ({ navigateTo, openLightbox }: ProjectsPageProps) => {
   const [filter, setFilter] = useState('All');
+  const [powerSubFilter, setPowerSubFilter] = useState<string | null>(null);
+  const [aviationSubFilter, setAviationSubFilter] = useState<string | null>(null);
+  const [heavySubFilter, setHeavySubFilter] = useState<string | null>(null);
+  const [industrialSubFilter, setIndustrialSubFilter] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(20);
 
-  const filteredProjects = filter === 'All' ? galleryData : galleryData.filter(p => p.category === filter);
+  // Map each main category to itself + all its sub-categories
+  const CATEGORY_GROUP: Record<string, string[]> = {
+    'Power Generators': [
+      'Power Generators',
+      ...POWER_GENERATOR_SUBS,
+    ],
+    'Specialised Aviation & Fleet Support': [
+      'Specialised Aviation & Fleet Support',
+      ...AVIATION_SUBS,
+    ],
+    'Heavy Vehicles': [
+      'Heavy Vehicles',
+      ...HEAVY_VEHICLES_SUBS,
+    ],
+    'Industrial,Plant,Construction,Forklift & Agriculture': [
+      'Industrial,Plant,Construction,Forklift & Agriculture',
+      ...INDUSTRIAL_SUBS,
+    ],
+  };
+
+  const activeSubFilter =
+    filter === 'Power Generators' ? powerSubFilter :
+      filter === 'Specialised Aviation & Fleet Support' ? aviationSubFilter :
+        filter === 'Heavy Vehicles' ? heavySubFilter :
+          filter === 'Industrial,Plant,Construction,Forklift & Agriculture' ? industrialSubFilter :
+            null;
+
+  const filteredProjects =
+    filter === 'All'
+      ? galleryData
+      : activeSubFilter
+        // sub-filter active: exact match
+        ? galleryData.filter(p => p.category === activeSubFilter)
+        // main category: match category itself + all sub-categories
+        : galleryData.filter(p => {
+          const group = CATEGORY_GROUP[filter];
+          return group ? group.includes(p.category) : p.category === filter;
+        });
+
   const displayedProjects = filteredProjects.slice(0, visibleCount);
 
   const handleFilterChange = (newFilter: string) => {
     setFilter(newFilter);
+    setPowerSubFilter(null);
+    setAviationSubFilter(null);
+    setHeavySubFilter(null);
+    setIndustrialSubFilter(null);
     setVisibleCount(20);
   };
 
@@ -900,7 +973,7 @@ const ProjectsPage = ({ navigateTo, openLightbox }: ProjectsPageProps) => {
           technician on-site a witness to the precision, sweat, and problem-solving that defines our true
           story. This is engineering in its rawest, most reliable form.</p>
 
-        <div className="flex justify-center gap-2 mb-12 flex-wrap">
+        <div className="flex justify-center gap-2 mb-4 flex-wrap">
           {['All', 'Power Generators', 'Marine Services', 'Specialised Aviation & Fleet Support', 'Heavy Vehicles', 'Industrial,Plant,Construction,Forklift & Agriculture', 'Sales & Components'].map((f) => (
             <button
               key={f}
@@ -914,6 +987,74 @@ const ProjectsPage = ({ navigateTo, openLightbox }: ProjectsPageProps) => {
             </button>
           ))}
         </div>
+
+        {filter === 'Power Generators' && (
+          <div className="flex justify-center gap-2 mb-8 flex-wrap">
+            {POWER_GENERATOR_SUBS.map((sub) => (
+              <button
+                key={sub}
+                onClick={() => { setPowerSubFilter(powerSubFilter === sub ? null : sub); setVisibleCount(20); }}
+                className={`px-4 py-2 rounded-full text-sm font-medium border transition-all ${powerSubFilter === sub
+                  ? 'bg-industrial-highlight text-white border-industrial-highlight shadow-md'
+                  : 'bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600 hover:border-industrial-accent hover:text-industrial-accent'
+                  }`}
+              >
+                {sub}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {filter === 'Specialised Aviation & Fleet Support' && (
+          <div className="flex justify-center gap-2 mb-8 flex-wrap">
+            {AVIATION_SUBS.map((sub) => (
+              <button
+                key={sub}
+                onClick={() => { setAviationSubFilter(aviationSubFilter === sub ? null : sub); setVisibleCount(20); }}
+                className={`px-4 py-2 rounded-full text-sm font-medium border transition-all ${aviationSubFilter === sub
+                  ? 'bg-industrial-highlight text-white border-industrial-highlight shadow-md'
+                  : 'bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600 hover:border-industrial-accent hover:text-industrial-accent'
+                  }`}
+              >
+                {sub}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {filter === 'Heavy Vehicles' && (
+          <div className="flex justify-center gap-2 mb-8 flex-wrap">
+            {HEAVY_VEHICLES_SUBS.map((sub) => (
+              <button
+                key={sub}
+                onClick={() => { setHeavySubFilter(heavySubFilter === sub ? null : sub); setVisibleCount(20); }}
+                className={`px-4 py-2 rounded-full text-sm font-medium border transition-all ${heavySubFilter === sub
+                  ? 'bg-industrial-highlight text-white border-industrial-highlight shadow-md'
+                  : 'bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600 hover:border-industrial-accent hover:text-industrial-accent'
+                  }`}
+              >
+                {sub}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {filter === 'Industrial,Plant,Construction,Forklift & Agriculture' && (
+          <div className="flex justify-center gap-2 mb-8 flex-wrap">
+            {INDUSTRIAL_SUBS.map((sub) => (
+              <button
+                key={sub}
+                onClick={() => { setIndustrialSubFilter(industrialSubFilter === sub ? null : sub); setVisibleCount(20); }}
+                className={`px-4 py-2 rounded-full text-sm font-medium border transition-all ${industrialSubFilter === sub
+                  ? 'bg-industrial-highlight text-white border-industrial-highlight shadow-md'
+                  : 'bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600 hover:border-industrial-accent hover:text-industrial-accent'
+                  }`}
+              >
+                {sub}
+              </button>
+            ))}
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {displayedProjects.map((p) => (
